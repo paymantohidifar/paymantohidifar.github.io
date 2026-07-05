@@ -1,0 +1,40 @@
+[workspace]
+name = "portfolio"
+version = "0.1.0"
+authors = ["Payman Tohidifar <payman.tohidifar@gmail.com>"]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+
+[dependencies]
+python = "3.11.*"
+jinja2 = ">=3.1.0"
+markdown = ">=3.6"
+pyyaml = ">=6.0"
+
+[feature.dev.dependencies]
+ruff = ">=0.3.0"
+nodejs = ">=20.0.0"
+
+[feature.dev.pypi-dependencies]
+portfolio = { path = ".", editable = true }
+
+[feature.test.dependencies]
+pytest = ">=8.0.0"
+
+[feature.test.pypi-dependencies]
+portfolio = { path = ".", editable = true }
+
+[environments]
+default = { features = ["dev"], no-default-feature = false }
+tests = { features = ["test"], no-default-feature = false }
+
+[tasks]
+# Runs the Python script to transform core content (Blogs/CV) into build-ready files
+compile-content = { cmd = "python src/portfolio/compiler.py", default-environment = "default" }
+# Leverages frontend tool (e.g., Vite) to launch a local dev server with hot-reloading
+start-frontend = { cmd = "npm run dev", default-environment = "default" }
+# Bundles the complete application into optimized static assets ready for GitHub deployment
+build-static = { cmd = "npm run build", default-environment = "default", depends-on = ["compile-content"] }
+# Quality Control tasks running over automated hooks
+test = { cmd = "pytest tests/", default-environment = "tests" }
+lint = { cmd = "ruff check . --fix && ruff format .", default-environment = "default" }
