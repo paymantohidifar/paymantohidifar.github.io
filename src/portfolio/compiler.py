@@ -1,87 +1,177 @@
-"""Portfolio compiler engine for converting Markdown content to static assets."""
+"""Static site builder: renders Markdown/YAML content into static HTML via Jinja2 templates."""
 
-import json
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
-from typing import Any, Dict, List
-import jinja2
+from typing import Any, Dict, List, Tuple
+
 import markdown
 import yaml
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+CONTENT_DIR = PROJECT_ROOT / "content"
+TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
+OUTPUT_DIR = PROJECT_ROOT / "public"
+
+SITE_NAME = "Payman Tohidifar — Portfolio"
+SITE_DESCRIPTION = (
+    "Portfolio of Payman Tohidifar, computational & synthetic biologist "
+    "and AIxBio enthusiast."
+)
 
 
-class StaticSiteCompiler:
-    """Core static compiler applying SOLID principles for portfolio resource generation."""
+@dataclass(frozen=True)
+class BlogPost:
+    """A single parsed and rendered blog post."""
 
-    def __init__(self, root_dir: Path) -> None:
-        self.root_dir = root_dir
-        self.content_dir = root_dir / "content" / "blogs"
-        self.output_dir = root_dir / "public" / "static"
-        self.md_processor = markdown.Markdown(extensions=["fenced_code", "tables"])
+    slug: str
+    title: str
+    date: str
+    description: str
+    content: str
 
-    def setup_directories(self) -> None:
-        """Ensures file structures are initialized safely without race conditions."""
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-
-    def parse_markdown_file(self, file_path: Path) -> Dict[str, Any]:
-        """Parses front-matter metadata and compiles markdown string blocks into clean HTML.
-
-        Adheres to robust string isolation processing patterns.
-        """
-        with file_path.open("r", encoding="utf-8") as f:
-            raw_content = f.read()
-
-        # Isolate YAML front matter section bounded by triple hyphens
-        if raw_content.startswith("---"):
-            parts = raw_content.split("---", 2)
-            metadata = yaml.safe_load(parts[1]) if len(parts) > 2 else {}
-            markdown_text = parts[2] if len(parts) > 2 else parts[1]
-        else:
-            metadata = {}
-            markdown_text = raw_content
-
-        compiled_html = self.md_processor.convert(markdown_text)
-
+    def summary(self) -> Dict[str, Any]:
+        """Metadata used for the blog listing page (excludes rendered HTML body)."""
         return {
-            "slug": file_path.stem,
-            "title": metadata.get("title", file_path.stem.replace("-", " ").title()),
-            "date": str(metadata.get("date", "2026-01-01")),
-            "description": metadata.get("description", ""),
-            "content": compiled_html,
+            "slug": self.slug,
+            "title": self.title,
+            "date": self.date,
+            "description": self.description,
         }
 
-    def compile(self) -> None:
-        """Executes the complete generation loop across local raw text trees."""
-        self.setup_directories()
-        blog_posts: List[Dict[str, Any]] = []
 
-        if not self.content_dir.exists():
-            return
+def parse_front_matter(raw_content: str) -> Tuple[Dict[str, Any], str]:
+    """Splits a Markdown file with a YAML front-matter header into (metadata, body)."""
+    if not raw_content.startswith("---"):
+        return {}, raw_content
+    parts = raw_content.split("---", 2)
+    if len(parts) < 3:
+        return {}, raw_content
+    metadata = yaml.safe_load(parts[1]) or {}
+    return metadata, parts[2]
 
-        # Core file stream processing using generators
-        for md_file in self.content_dir.glob("*.md"):
-            try:
-                post_data = self.parse_markdown_file(md_file)
-                blog_posts.append(post_data)
 
-                # Write out individual compiled JSON file payloads for async frontend picking
-                individual_output = self.output_dir / f"{post_data['slug']}.json"
-                with individual_output.open("w", encoding="utf-8") as out_f:
-                    json.dump(post_data, out_f, indent=2)
+def render_markdown(text: str) -> str:
+    """Converts a Markdown body into HTML using the standard extension set."""
+    return markdown.Markdown(extensions=["fenced_code", "tables"]).convert(text)
 
-            except Exception as e:
-                print(f"[-] Structural parsing failure on file node {md_file}: {e}")
 
-        # Sort posts chronologically by date descending
-        blog_posts.sort(key=lambda x: x["date"], reverse=True)
+def load_blog_posts(content_dir: Path) -> List[BlogPost]:
+    """Loads and renders every Markdown post under content/blogs, newest first."""
+    posts: List[BlogPost] = []
+    blogs_dir = content_dir / "blogs"
+    if not blogs_dir.exists():
+        return posts
 
-        # Write out a central database manifest mapping file for index generation
-        manifest_path = self.output_dir / "blog_manifest.json"
-        with manifest_path.open("w", encoding="utf-8") as manifest_f:
-            json.dump(blog_posts, manifest_f, indent=2)
+    for md_file in sorted(blogs_dir.glob("*.md")):
+        raw = md_file.read_text(encoding="utf-8")
+        metadata, body = parse_front_matter(raw)
+        posts.append(
+            BlogPost(
+                slug=md_file.stem,
+                title=metadata.get("title", md_file.stem.replace("-", " ").title()),
+                date=str(metadata.get("date", "2026-01-01")),
+                description=metadata.get("description", ""),
+                content=render_markdown(body),
+            )
+        )
 
-        print(f"[+] Static processing complete. Generated {len(blog_posts)} blog artifacts.")
+    posts.sort(key=lambda post: post.date, reverse=True)
+    return posts
+
+
+def load_about(content_dir: Path) -> Dict[str, Any]:
+    """Loads the About page front-matter (profile info) plus rendered body HTML."""
+    raw = (content_dir / "about.md").read_text(encoding="utf-8")
+    metadata, body = parse_front_matter(raw)
+    metadata["about_html"] = render_markdown(body)
+    return metadata
+
+
+def load_yaml(path: Path) -> Any:
+    """Loads a YAML content file (CV data, project list, etc.)."""
+    return yaml.safe_load(path.read_text(encoding="utf-8"))
+
+
+class SiteBuilder:
+    """Renders all static portfolio pages from content files and Jinja2 templates."""
+
+    def __init__(
+        self, content_dir: Path, templates_dir: Path, output_dir: Path
+    ) -> None:
+        self.content_dir = content_dir
+        self.output_dir = output_dir
+        self.env = Environment(
+            loader=FileSystemLoader(str(templates_dir)),
+            autoescape=select_autoescape(["html"]),
+        )
+
+    def build(self) -> None:
+        """Generates every static page (about/cv/projects/blogs + individual posts)."""
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        about = load_about(self.content_dir)
+        cv = load_yaml(self.content_dir / "cv.yaml")
+        projects = load_yaml(self.content_dir / "projects.yaml")
+        posts = load_blog_posts(self.content_dir)
+
+        base_ctx = self._base_context(about)
+
+        self._render(
+            "about.html", "index.html", {**base_ctx, "about_html": about["about_html"]}
+        )
+        self._render("cv.html", "cv.html", {**base_ctx, "cv": cv})
+        self._render(
+            "projects.html", "projects.html", {**base_ctx, "projects": projects}
+        )
+        self._render(
+            "blogs.html",
+            "blogs.html",
+            {**base_ctx, "posts": [post.summary() for post in posts]},
+        )
+        for post in posts:
+            post_ctx = {**post.summary(), "content": post.content}
+            self._render(
+                "blog_post.html",
+                f"blogs/{post.slug}.html",
+                {**base_ctx, "post": post_ctx},
+            )
+
+        print(
+            f"[+] Static site built: {len(posts)} blog post(s), output in {self.output_dir}"
+        )
+
+    @staticmethod
+    def _base_context(about: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            "site_name": SITE_NAME,
+            "site_description": SITE_DESCRIPTION,
+            "name": about.get("name", ""),
+            "tagline": about.get("tagline", ""),
+            "email": about.get("email", ""),
+            "github": about.get("github", ""),
+            "linkedin": about.get("linkedin", ""),
+            "scholar": about.get("scholar", ""),
+            "year": date.today().year,
+        }
+
+    def _render(
+        self, template_name: str, output_relpath: str, context: Dict[str, Any]
+    ) -> None:
+        template = self.env.get_template(template_name)
+        html = template.render(**context)
+        out_path = self.output_dir / output_relpath
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(html, encoding="utf-8")
+
+
+def main() -> None:
+    builder = SiteBuilder(CONTENT_DIR, TEMPLATES_DIR, OUTPUT_DIR)
+    builder.build()
 
 
 if __name__ == "__main__":
-    project_root = Path(__file__).resolve().parents[2]
-    compiler = StaticSiteCompiler(project_root)
-    compiler.compile()
+    main()
