@@ -19,7 +19,9 @@ export default defineConfig(({ command }) => {
     publicDir: false,
     build: {
       outDir: resolve(publicDir, "static", "assets"),
-      emptyOutDir: true,
+      // false: this dir also holds content assets copied by the Python
+      // builder (content/assets/), which runs before this build step.
+      emptyOutDir: false,
       assetsDir: ".",
       rollupOptions: {
         input: {
