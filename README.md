@@ -1,6 +1,6 @@
 # paymantohidifar.github.io
 
-Personal portfolio site for Payman Tohidifar. Statically generated from Markdown/YAML
+My personal portfolio site. Statically generated from Markdown/YAML
 content and deployed to GitHub Pages.
 
 Live at: https://paymantohidifar.github.io/
