@@ -48,3 +48,10 @@ Use these explicit target commands when executing workspace automation steps:
 * **No Global System Traps:** Do NOT install Python dependencies using global or un-isolated `pip install`. Everything must pass through the `pixi.toml` manifest file.
 * **Static Type Safety:** All custom Python code written inside `src/` must contain explicit types using the `typing` module. Verify validation parameters cleanly before building.
 * **Atomic Git Workflows:** Code adjustments must be written via micro-commits matching semantic descriptions. Never push unreviewed files straight to `main`.
+
+## 6. Deployment & CI/CD
+
+* **Remote:** [`paymantohidifar/paymantohidifar.github.io`](https://github.com/paymantohidifar/paymantohidifar.github.io), live at https://paymantohidifar.github.io/.
+* **CI (`.github/workflows/ci.yml`):** Runs on every pull request and on pushes to `main`/`dev`. Executes `pixi run test` plus `ruff check .` / `ruff format --check .` (check-only, no auto-fix in CI).
+* **Deploy (`.github/workflows/deploy.yml`):** Runs on push to `main`. Executes `pixi run build-static` and publishes the resulting `public/` directory to GitHub Pages via `actions/deploy-pages`. GitHub Pages is configured with `build_type: workflow` (not the legacy branch-build source).
+* **Content assets:** Static files that aren't Markdown/YAML (icons, images) live in `content/assets/` and are copied verbatim into `public/static/assets/` by the Python builder before the frontend bundle step runs — keep `emptyOutDir: false` in `frontend/vite.config.js` so the JS/CSS build doesn't wipe them.
