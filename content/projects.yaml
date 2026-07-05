@@ -1,0 +1,17 @@
+- title: Replace Project One
+  description: >
+    Short one or two sentence description of this project, the problem it
+    solves, and the tools/methods used.
+  link: https://github.com/paymantohidifar
+  tags:
+    - Synthetic Biology
+    - Python
+
+- title: Replace Project Two
+  description: >
+    Short one or two sentence description of this project, the problem it
+    solves, and the tools/methods used.
+  link: https://github.com/paymantohidifar
+  tags:
+    - Machine Learning
+    - Bioinformatics
