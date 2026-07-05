@@ -5,7 +5,7 @@ tagline: Computational & Synthetic Biologist, AIxBio Enthusiast
 email: payman.tohidifar@gmail.com
 github: https://github.com/paymantohidifar
 linkedin: https://linkedin.com/in/paymantohidifar
-scholar: https://scholar.google.com/citations?user=REPLACE_ME
+scholar: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
 ---
 I am a computational and synthetic biologist interested in the intersection of
 artificial intelligence and biology (AIxBio). My work spans designing
