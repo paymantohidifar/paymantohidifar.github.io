@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ name }} — Projects{% endblock %}
+{% block content %}
+<section data-page="projects">
+  <h1>Projects</h1>
+  <ul class="project-grid">
+    {% for project in projects %}
+    <li class="project-card">
+      <h2><a href="{{ project.link }}" target="_blank" rel="noopener noreferrer">{{ project.title }}</a></h2>
+      <p>{{ project.description }}</p>
+      <ul class="tag-list">
+        {% for tag in project.tags %}
+        <li>{{ tag }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

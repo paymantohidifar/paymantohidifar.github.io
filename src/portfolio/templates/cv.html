@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ name }} — CV/Resume{% endblock %}
+{% block content %}
+<section data-page="cv">
+  <div class="page-header">
+    <h1>CV / Resume</h1>
+    <a class="button" href="{{ cv.resume_pdf }}" download>Download PDF</a>
+  </div>
+
+  <h2>Education</h2>
+  <ul class="cv-list">
+    {% for item in cv.education %}
+    <li>
+      <div class="cv-item-header">
+        <strong>{{ item.institution }}</strong>
+        <span class="period">{{ item.period }}</span>
+      </div>
+      <p>{{ item.degree }}</p>
+      <p class="details">{{ item.details }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2>Experience</h2>
+  <ul class="cv-list">
+    {% for item in cv.experience %}
+    <li>
+      <div class="cv-item-header">
+        <strong>{{ item.organization }}</strong>
+        <span class="period">{{ item.period }}</span>
+      </div>
+      <p>{{ item.role }}</p>
+      <p class="details">{{ item.details }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2>Skills</h2>
+  <ul class="tag-list">
+    {% for skill in cv.skills %}
+    <li>{{ skill }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Publications</h2>
+  <ul class="cv-list">
+    {% for pub in cv.publications %}
+    <li>
+      <a href="{{ pub.link }}" target="_blank" rel="noopener noreferrer">{{ pub.title }}</a>
+      <p class="details">{{ pub.venue }} &middot; {{ pub.year }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

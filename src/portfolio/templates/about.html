@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ name }} — About{% endblock %}
+{% block content %}
+<section class="hero" data-page="about">
+  <h1>{{ name }}</h1>
+  <p class="tagline">{{ tagline }}</p>
+  <div class="prose">
+    {{ about_html | safe }}
+  </div>
+</section>
+{% endblock %}
