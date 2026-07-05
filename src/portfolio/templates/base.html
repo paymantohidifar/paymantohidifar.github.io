@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}{{ site_name }}{% endblock %}</title>
+  <meta name="description" content="{{ site_description }}" />
+  <link rel="stylesheet" href="/static/assets/main.css" />
+  <script>
+    (function () {
+      var stored = localStorage.getItem("theme");
+      var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.classList.toggle("dark", theme === "dark");
+    })();
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">{{ name }}</a>
+    <nav class="site-nav">
+      <a href="/index.html" data-nav="about">About</a>
+      <a href="/cv.html" data-nav="cv">CV/Resume</a>
+      <a href="/projects.html" data-nav="projects">Projects</a>
+      <a href="/blogs.html" data-nav="blogs">Blogs</a>
+      <button id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+        <span class="icon-sun" aria-hidden="true">&#9728;</span>
+        <span class="icon-moon" aria-hidden="true">&#9789;</span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="socials">
+      <a href="mailto:{{ email }}" aria-label="Email" title="Email">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+      </a>
+      <a href="{{ github }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.1c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.18 1.83 1.18 3.09 0 4.44-2.7 5.42-5.28 5.7.42.36.78 1.07.78 2.16v3.2c0 .3.21.66.79.55C20.21 21.38 23.5 17.07 23.5 12c0-6.27-5.23-11.5-11.5-11.5Z"/></svg>
+      </a>
+      <a href="{{ linkedin }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.11 1 2.48 1s2.5 1.12 2.5 2.5ZM.5 8.25h4v14.25h-4V8.25Zm7.25 0h3.84v1.95h.05c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.14v8.22h-4v-7.29c0-1.74-.03-3.98-2.43-3.98-2.43 0-2.8 1.9-2.8 3.86v7.41h-4V8.25Z"/></svg>
+      </a>
+      <a href="{{ scholar }}" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar" title="Google Scholar">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2 0 9.5l4 2.47V18l8 5 8-5v-6.03l2-1.24V16h1.5V9.5L12 2Zm0 2.36 8.36 5.14L12 14.64 3.64 9.5 12 4.36ZM6 13.2l6 3.7 6-3.7v3.7l-6 3.7-6-3.7v-3.7Z"/></svg>
+      </a>
+    </div>
+    <p class="copyright">&copy; {{ year }} {{ name }}</p>
+  </footer>
+
+  <script type="module" src="/static/assets/main.js"></script>
+</body>
+</html>

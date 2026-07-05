@@ -1,0 +1,28 @@
+name: Payman Tohidifar
+tagline: Computational & Synthetic Biologist, AIxBio Enthusiast
+resume_pdf: /static/assets/resume.pdf
+
+education:
+  - institution: Replace With University
+    degree: Ph.D. in Synthetic Biology
+    period: "2019 - 2024"
+    details: Replace with dissertation focus and notable coursework.
+
+experience:
+  - organization: Replace With Lab or Company
+    role: Postdoctoral Researcher / Scientist
+    period: "2024 - Present"
+    details: Replace with a short description of responsibilities and impact.
+
+skills:
+  - Synthetic Biology
+  - Computational Modeling
+  - Machine Learning for Biology
+  - Python
+  - Molecular Cloning
+
+publications:
+  - title: Replace with publication title
+    venue: Replace with journal/conference
+    year: 2024
+    link: https://scholar.google.com/citations?user=REPLACE_ME

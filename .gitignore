@@ -1,3 +1,16 @@
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+# node
+node_modules/
+
+# build output
+public/
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
