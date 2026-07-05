@@ -47,15 +47,10 @@ a:hover {
 .site-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 1.5rem 1.25rem 0.5rem;
-}
-
-.brand {
-  font-weight: 600;
-  color: var(--text);
 }
 
 .site-nav {
