@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import shutil
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -112,6 +113,7 @@ class SiteBuilder:
     def build(self) -> None:
         """Generates every static page (about/cv/projects/blogs + individual posts)."""
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        self._copy_static_assets()
 
         about = load_about(self.content_dir)
         cv = load_yaml(self.content_dir / "cv.yaml")
@@ -143,6 +145,17 @@ class SiteBuilder:
         print(
             f"[+] Static site built: {len(posts)} blog post(s), output in {self.output_dir}"
         )
+
+    def _copy_static_assets(self) -> None:
+        """Copies non-templated content assets (images, icons) into public/static/assets."""
+        assets_dir = self.content_dir / "assets"
+        if not assets_dir.exists():
+            return
+        target_dir = self.output_dir / "static" / "assets"
+        target_dir.mkdir(parents=True, exist_ok=True)
+        for asset in assets_dir.iterdir():
+            if asset.is_file():
+                shutil.copy2(asset, target_dir / asset.name)
 
     @staticmethod
     def _base_context(about: Dict[str, Any]) -> Dict[str, Any]:
