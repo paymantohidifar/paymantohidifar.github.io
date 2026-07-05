@@ -1,9 +1,9 @@
 :root {
-  --bg: #ffffff;
-  --bg-elevated: #f4f4f5;
+  --bg: #f2ecdd;
+  --bg-elevated: #ece4d0;
   --text: #1a1a1a;
   --text-muted: #5f6368;
-  --border: #e2e2e4;
+  --border: #ddd3ba;
   --accent: #2f5d50;
   --accent-contrast: #ffffff;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
