@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 {% block title %}{{ name }} — {{ post.title }}{% endblock %}
+{% block head_extra %}
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [["$", "$"]],
+      displayMath: [["$$", "$$"]]
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{% endblock %}
 {% block content %}
 <section class="prose" data-page="blog-post">
   <a class="back-link" href="/blogs.html">&larr; Back to Blogs</a>
