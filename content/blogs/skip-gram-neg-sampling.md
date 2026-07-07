@@ -10,7 +10,7 @@ tags:
 
 <img src="/static/assets/skip_gram_negative_sampling.jpg" width=750px>
 
->**Note:** For in-depth technical details and hands-on experience, you can access the interactive [Jupyter Notebook version](https://www.google.com) of this tutorial.
+>**Note:** For in-depth technical details and hands-on experience, you can access the interactive [Jupyter Notebook version](https://github.com/paymantohidifar/deep-learning-specialization-coursera/blob/main/bonus/notebooks/skip_gram_negative_sampling_pytorch.ipynb) of this tutorial.
 
 ---
 
