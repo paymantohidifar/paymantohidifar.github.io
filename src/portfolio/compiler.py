@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import shutil
-from dataclasses import dataclass
-from datetime import date
+from dataclasses import dataclass, field
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -33,6 +33,7 @@ class BlogPost:
     date: str
     description: str
     content: str
+    tags: List[str] = field(default_factory=list)
 
     def summary(self) -> Dict[str, Any]:
         """Metadata used for the blog listing page (excludes rendered HTML body)."""
@@ -41,6 +42,7 @@ class BlogPost:
             "title": self.title,
             "date": self.date,
             "description": self.description,
+            "tags": self.tags,
         }
 
 
@@ -57,7 +59,25 @@ def parse_front_matter(raw_content: str) -> Tuple[Dict[str, Any], str]:
 
 def render_markdown(text: str) -> str:
     """Converts a Markdown body into HTML using the standard extension set."""
-    return markdown.Markdown(extensions=["fenced_code", "tables"]).convert(text)
+    return markdown.Markdown(
+        extensions=["fenced_code", "tables", "codehilite"],
+        extension_configs={
+            "codehilite": {"guess_lang": False, "css_class": "codehilite"}
+        },
+    ).convert(text)
+
+
+_DATE_FORMATS = ("%Y-%m-%d", "%B %Y", "%b %Y")
+
+
+def _parse_post_date(raw_date: str) -> date:
+    """Parses a front-matter date string (e.g. "March 2025", "2026-01-15") for sorting."""
+    for fmt in _DATE_FORMATS:
+        try:
+            return date(*datetime.strptime(raw_date, fmt).timetuple()[:3])
+        except ValueError:
+            continue
+    return date.min
 
 
 def load_blog_posts(content_dir: Path) -> List[BlogPost]:
@@ -77,10 +97,11 @@ def load_blog_posts(content_dir: Path) -> List[BlogPost]:
                 date=str(metadata.get("date", "2026-01-01")),
                 description=metadata.get("description", ""),
                 content=render_markdown(body),
+                tags=metadata.get("tags", []),
             )
         )
 
-    posts.sort(key=lambda post: post.date, reverse=True)
+    posts.sort(key=lambda post: _parse_post_date(post.date), reverse=True)
     return posts
 
 

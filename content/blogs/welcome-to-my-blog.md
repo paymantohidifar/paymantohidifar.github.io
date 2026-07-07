@@ -1,6 +1,6 @@
 ---
 title: Welcome to My Blog
-date: 2026-01-15
+date: Jan 2025
 description: An introduction to this site and what I plan to write about.
 ---
 Welcome! This is the first post on my new portfolio site.

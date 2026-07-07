@@ -77,6 +77,7 @@ def test_blog_post_summary_excludes_rendered_content() -> None:
         date="2026-01-01",
         description="A description.",
         content="<p>Full body</p>",
+        tags=["Python", "Testing"],
     )
 
     summary = post.summary()
@@ -86,6 +87,7 @@ def test_blog_post_summary_excludes_rendered_content() -> None:
         "title": "My Post",
         "date": "2026-01-01",
         "description": "A description.",
+        "tags": ["Python", "Testing"],
     }
     assert "content" not in summary
 
