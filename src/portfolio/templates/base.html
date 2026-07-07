@@ -13,6 +13,7 @@
       document.documentElement.classList.toggle("dark", theme === "dark");
     })();
   </script>
+  {% block head_extra %}{% endblock %}
 </head>
 <body>
   <header class="site-header">
@@ -54,5 +55,6 @@
   </footer>
 
   <script type="module" src="/static/assets/main.js"></script>
+  {% block scripts_extra %}{% endblock %}
 </body>
 </html>
