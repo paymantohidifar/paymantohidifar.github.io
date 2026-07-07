@@ -18,6 +18,7 @@ This file contains the core governance principles, engineering standards, and ar
   4. Blogs
 - **Visual Design - Sun/Moon Toggle:** A highly visible theme toggle must be positioned on the page (prefer top-right adjacent to navigation). It must cleanly transition the portfolio theme between light and dark backgrounds using global CSS variables or native class overrides (`.dark`).
 - **Blogs Page Specifications:** The blog landing page must present a clean list of written blog post titles. Clicking a title must dynamically route the user to or load the respective markdown-compiled static content seamlessly without breaking full-site navigation.
+- **Blog Ordering:** Posts must be listed newest-first by their front-matter `date` field. Since `date` is free text (e.g. `March 2025`, `2026-01-15`), the builder (`load_blog_posts` in `src/portfolio/compiler.py`) parses it into an actual `date` object for sorting instead of comparing the raw strings — a lexicographic sort silently misorders month names (`"March 2025"` sorts before `"Feb 2025"` alphabetically, which is wrong chronologically).
 - **Social Integrations:** Must embed distinct functional icons linking directly to:
   - Email (using standard `mailto:` links)
   - GitHub Page

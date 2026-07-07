@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import shutil
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -60,6 +60,19 @@ def render_markdown(text: str) -> str:
     return markdown.Markdown(extensions=["fenced_code", "tables"]).convert(text)
 
 
+_DATE_FORMATS = ("%Y-%m-%d", "%B %Y", "%b %Y")
+
+
+def _parse_post_date(raw_date: str) -> date:
+    """Parses a front-matter date string (e.g. "March 2025", "2026-01-15") for sorting."""
+    for fmt in _DATE_FORMATS:
+        try:
+            return date(*datetime.strptime(raw_date, fmt).timetuple()[:3])
+        except ValueError:
+            continue
+    return date.min
+
+
 def load_blog_posts(content_dir: Path) -> List[BlogPost]:
     """Loads and renders every Markdown post under content/blogs, newest first."""
     posts: List[BlogPost] = []
@@ -80,7 +93,7 @@ def load_blog_posts(content_dir: Path) -> List[BlogPost]:
             )
         )
 
-    posts.sort(key=lambda post: post.date, reverse=True)
+    posts.sort(key=lambda post: _parse_post_date(post.date), reverse=True)
     return posts
 
 
