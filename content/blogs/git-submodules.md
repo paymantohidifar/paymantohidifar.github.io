@@ -2,6 +2,9 @@
 title: "Beyond the Monolith: Mastering Nested Repositories with Git Submodules"
 date: Feb 2025
 description: A concise guide to managing complex project structures and dependencies efficiently using Git submodules.
+tags:
+  - Git
+  - DevOps
 ---
 
 <img src="/static/assets/git_submodules.png" width=750px>

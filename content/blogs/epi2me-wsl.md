@@ -2,6 +2,10 @@
 title: "Going Offline: Installing EPI2ME Workflows by Hand on WSL2"
 date: March 2025
 description: A step-by-step guide to manually installing and configuring EPI2ME workflows for fully offline execution on WSL2.
+tags:
+  - Bioinformatics
+  - WSL2
+  - Nextflow
 ---
 ### Introduction
 

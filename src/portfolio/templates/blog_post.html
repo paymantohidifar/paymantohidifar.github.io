@@ -5,6 +5,13 @@
   <a class="back-link" href="/blogs.html">&larr; Back to Blogs</a>
   <h1>{{ post.title }}</h1>
   <p class="period">{{ post.date }}</p>
+  {% if post.tags %}
+  <ul class="tag-list">
+    {% for tag in post.tags %}
+    <li>{{ tag }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
   <div>{{ post.content | safe }}</div>
 </section>
 {% endblock %}
