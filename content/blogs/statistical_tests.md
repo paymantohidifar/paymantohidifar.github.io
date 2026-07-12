@@ -1,6 +1,6 @@
 ---
 title: "Which Statistical Test Should You Actually Use?"
-date: December 2026
+date: December 2025
 description: A practical guide to picking the right statistical test based on group count, distribution shape, and sample size, with Python snippets for each.
 tags:
   - Statistics
