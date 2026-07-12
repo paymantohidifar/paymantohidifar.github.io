@@ -1,6 +1,6 @@
 ---
 title: "PyTorch Implementation of Skip-gram with Negative Sampling"
-date: Nov 2025
+date: November 2025
 description: A from-scratch PyTorch walkthrough of Skip-gram Word2Vec with negative sampling, from dataset construction to trained embeddings.
 tags:
   - PyTorch
@@ -10,43 +10,43 @@ tags:
 
 <img src="/static/assets/skip_gram_negative_sampling.jpg" width=750px>
 
->**Note:** For in-depth technical details and hands-on experience, you can access the interactive [Jupyter Notebook version](https://github.com/paymantohidifar/deep-learning-specialization-coursera/blob/main/bonus/notebooks/skip_gram_negative_sampling_pytorch.ipynb) of this tutorial.
+> **Note:** For in-depth technical details and hands-on experience, you can access the interactive [Jupyter Notebook version](https://github.com/paymantohidifar/deep-learning-specialization-coursera/blob/main/bonus/notebooks/skip_gram_negative_sampling_pytorch.ipynb) of this tutorial.
 
 ---
 
-### The Negative Sampling Architecture
+## The Negative Sampling Architecture
 
 To implement the Skip-gram Word2Vec model with **Negative Sampling**, we pivot from the standard "predict a neighbor word" Softmax approach toward a high-speed **Binary Classification** task. Softmax is computationally expensive for large vocabularies; instead, our model takes two inputs—a **Context word** and a **Target word**—and predicts whether they are true neighbors ($1$) or a random pair ($0$).
 
-### The Training & Deployment Workflow
+## The Training & Deployment Workflow
 
 The following steps outline the end-to-end process for training the model and preserving the learned embeddings:
 
-1.  **Prepare and Load the Dataset:** Tokenize the corpus and generate (context, positive target, negative samples) triplets using a sliding window.
-2.  **Define the Model:** Implement a dual-embedding architecture (Context matrix $E$ and Parameter matrix $\theta$) that uses a dot product to measure word similarity.
-3.  **Define the Loss Objective:** Use the Negative Sampling loss function, combining the log-sigmoids of positive and negative scores.
-4.  **Train the Model:** Iterate through the dataset, using backpropagation to adjust vectors until words with similar meanings cluster together.
-5.  **Extract and Save Weights:** Isolate the trained Matrix $E$ and save it, discarding the temporary classification parameters.
-6.  **Load for Inference:** Re-initialize a standalone embedding layer with the saved weights to perform similarity searches.
+1. **Prepare and Load the Dataset:** Tokenize the corpus and generate (context, positive target, negative samples) triplets using a sliding window.
+2. **Define the Model:** Implement a dual-embedding architecture (Context matrix $E$ and Parameter matrix $\theta$) that uses a dot product to measure word similarity.
+3. **Define the Loss Objective:** Use the Negative Sampling loss function, combining the log-sigmoids of positive and negative scores.
+4. **Train the Model:** Iterate through the dataset, using backpropagation to adjust vectors until words with similar meanings cluster together.
+5. **Extract and Save Weights:** Isolate the trained Matrix $E$ and save it, discarding the temporary classification parameters.
+6. **Load for Inference:** Re-initialize a standalone embedding layer with the saved weights to perform similarity searches.
 
------
+---
 
-#### 1. Preparing and Loading the Dataset
+### Preparing and Loading the Dataset
 
 To train a model using **Negative Sampling**, we must structure our data into batches that contrast real word pairings with random noise. This requires a custom `Dataset` class to manage context-target pairing and a `DataLoader` to handle batching and shuffling. Note that we pass **numerical indices** mapped from our vocabulary, not raw text.
 
 Our custom `Word2VecDataset` class generates a training triplet for every word:
 
-1.  **Context:** The index of the current "center" word.
-2.  **Positive Target:** The index of a word found within a local sliding window (e.g., $\pm 2$ words).
-3.  **Negative Targets:** A set of $k$ random indices from the vocabulary that are *not* the positive target.
+1. **Context:** The index of the current "center" word.
+2. **Positive Target:** The index of a word found within a local sliding window (e.g., $\pm 2$ words).
+3. **Negative Targets:** A set of $k$ random indices from the vocabulary that are *not* the positive target.
 
-##### Key Technical Implementation Notes
+#### Key Technical Implementation Notes
 
-  * **Memory Efficiency & Regularization:** We generate `negatives` dynamically inside `__getitem__`. This avoids storing a massive dataset on disk and ensures the model sees different random noise in every epoch, acting as a form of regularization.
-  * **Seamless Batching:** The PyTorch `DataLoader` automatically stacks these triplets into tensors. For a `batch_size` of $64$ and $k=5$, the negative target tensor becomes $(64, 5)$, aligning perfectly with the **Batch Matrix Multiplication** (`torch.bmm`) in our model.
+* **Memory Efficiency & Regularization:** We generate `negatives` dynamically inside `__getitem__`. This avoids storing a massive dataset on disk and ensures the model sees different random noise in every epoch, acting as a form of regularization.
+* **Seamless Batching:** The PyTorch `DataLoader` automatically stacks these triplets into tensors. For a `batch_size` of $64$ and $k=5$, the negative target tensor becomes $(64, 5)$, aligning perfectly with the **Batch Matrix Multiplication** (`torch.bmm`) in our model.
 
-##### The Role of the `__getitem__` Method
+#### The Role of the `__getitem__` Method
 
 This "magic method" is a placeholder in the base `torch.utils.data.Dataset`. We define it in our subclass so the `DataLoader` knows how to fetch a specific triplet. Once defined, we can use square bracket notation:
 
@@ -122,7 +122,7 @@ class Word2VecDataset(Dataset):
         )
 ```
 
-##### Verifying the Pipeline with Mock Data
+#### Verifying the Pipeline with Mock Data
 
 To verify our implementation, we define a mock dataset with overlapping "tokens." This simulates a corpus where words appear in multiple contexts, allowing the model to learn complex semantic relationships. We assume the sentences have already been tokenized and converted into numerical indices:
 
@@ -151,16 +151,16 @@ print(len(iter(dataloader)))
 
 ```
 
------
+---
 
-#### 2. Defining the Model
+### Defining the Model
 
 We define our model using an **Embedding Layer** for both context and target, followed by a **Dot Product** comparison.
 
-##### Asymmetric Initialization Strategy
+#### Asymmetric Initialization Strategy
 
-  * **Random $E$ (Input):** Initializing $E$ with small random values ensures tokens start at unique coordinates, breaking symmetry and allowing the model to differentiate words immediately.
-  * **Zero $\theta$ (Output):** Matrix $\theta$ acts as binary classifiers. Initializing weights to zero creates a "neutral" baseline where $Sigmoid(0) = 0.5$. This generates strong initial gradients, driving weights toward $1$ for neighbors or $0$ for noise.
+* **Random $E$ (Input):** Initializing $E$ with small random values ensures tokens start at unique coordinates, breaking symmetry and allowing the model to differentiate words immediately.
+* **Zero $\theta$ (Output):** Matrix $\theta$ acts as binary classifiers. Initializing weights to zero creates a "neutral" baseline where $Sigmoid(0) = 0.5$. This generates strong initial gradients, driving weights toward $1$ for neighbors or $0$ for noise.
 
 ```python
 import torch.nn as nn
@@ -196,9 +196,9 @@ class NegativeSamplingModel(nn.Module):
         return pos_score, neg_score
 ```
 
------
+---
 
-#### 3. Defining the Loss Objective
+### Defining the Loss Objective
 
 The objective function rewards the model for high dot products with neighbors and punishes it for high dot products with random noise.
 
@@ -214,19 +214,19 @@ class NegativeSamplingLoss(nn.Module):
         return -torch.mean(pos_loss + neg_loss)
 ```
 
------
+---
 
-#### 4. Training the Model
+### Training the Model
 
 During training, we update **both** the Context ($E$) and Target ($\theta$) embeddings.
 
-##### Gradient Management: `zero_grad()`
+#### Gradient Management: `zero_grad()`
 
 In PyTorch, gradients accumulate by default: $\nabla_{W} L_{total} = \nabla_{W} L_{old} + \nabla_{W} L_{new}$. If we don't call `optimizer.zero_grad()` between batches, the gradients from previous batches will "haunt" the current one, leading to failure.
 
 **Pro-Tip:** Use `optimizer.zero_grad(set_to_none=True)` for a slight performance boost, as it deletes gradients instead of writing zeros.
 
-##### The `model()` call vs. `forward()`
+#### The `model()` call vs. `forward()`
 
 Always use the functional `model(inputs)` call. This triggers the `__call__` method in `nn.Module`, which manages **Hooks** (debugging tools), **State Management**, and **Safety Checks** before executing your `forward` logic.
 
@@ -252,14 +252,14 @@ for epoch in range(epochs):
         progress_bar.set_postfix({'loss': f"{loss.item():.4f}"})
 ```
 
------
+---
 
-#### 5. Extracting and Saving Weights
+### Extracting and Saving Weights
 
 Once training is complete, the `out_embed` ($\theta$) has served its purpose as a classifier. Matrix $E$ is the actual "semantic map" we want.
 
-  * **Reduced Footprint:** Saving only $E$ results in smaller files.
-  * **Plug-and-Play:** These weights can initialize more complex models like Transformers.
+* **Reduced Footprint:** Saving only $E$ results in smaller files.
+* **Plug-and-Play:** These weights can initialize more complex models like Transformers.
 
 ```python
 SAVE_PATH = "embeddings_v1.pt"
@@ -267,16 +267,16 @@ embedding_weights = model.in_embed.state_dict()
 torch.save(embedding_weights, SAVE_PATH)
 ```
 
------
+---
 
-#### 6. Loading for Inference
+### Loading for Inference
 
 For inference, we only need an `nn.Embedding` container and our weights.
 
-##### Evaluation Mode
+#### Evaluation Mode
 
-1.  **`.eval()`**: Disables training behavior like Dropout.
-2.  **`torch.no_grad()`**: Disables the computational graph to save memory and speed up inference.
+1. **`.eval()`**: Disables training behavior like Dropout.
+2. **`torch.no_grad()`**: Disables the computational graph to save memory and speed up inference.
 
 ```python
 def get_most_similar(word_idx, embedding_layer, top_k=5):
@@ -296,15 +296,15 @@ with torch.no_grad():
     print(f"Similar indices: {similar_indices.tolist()}")
 ```
 
-##### Note on Performance
+#### Note on Performance
 
 If your neighbors aren't perfect, don't worry. Meaningful semantic clustering requires massive corpora and tuning. This workflow demonstrates the **standard end-to-end training process** used to manage data, gradients, and model extraction.
 
------
+---
 
-#### Dot Product vs. Cosine Similarity
+### Dot Product vs. Cosine Similarity
 
 Why use **Dot Product** for training but **Cosine Similarity** for search?
 
-1.  **Efficiency:** Dot products are simpler and faster to compute during millions of training updates.
-2.  **Vector Norm:** Dot products preserve vector length. In Word2Vec, length often encodes **frequency and confidence**. Rare words remain near the origin (small norm), while frequent words grow longer. Discarding this information via Cosine Similarity during training would make the model less expressive.
+1. **Efficiency:** Dot products are simpler and faster to compute during millions of training updates.
+2. **Vector Norm:** Dot products preserve vector length. In Word2Vec, length often encodes **frequency and confidence**. Rare words remain near the origin (small norm), while frequent words grow longer. Discarding this information via Cosine Similarity during training would make the model less expressive.

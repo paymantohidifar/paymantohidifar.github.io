@@ -19,6 +19,16 @@ This file contains the core governance principles, engineering standards, and ar
 - **Visual Design - Sun/Moon Toggle:** A highly visible theme toggle must be positioned on the page (prefer top-right adjacent to navigation). It must cleanly transition the portfolio theme between light and dark backgrounds using global CSS variables or native class overrides (`.dark`).
 - **Blogs Page Specifications:** The blog landing page must present a clean list of written blog post titles. Clicking a title must dynamically route the user to or load the respective markdown-compiled static content seamlessly without breaking full-site navigation.
 - **Blog Ordering:** Posts must be listed newest-first by their front-matter `date` field. Since `date` is free text (e.g. `March 2025`, `2026-01-15`), the builder (`load_blog_posts` in `src/portfolio/compiler.py`) parses it into an actual `date` object for sorting instead of comparing the raw strings — a lexicographic sort silently misorders month names (`"March 2025"` sorts before `"Feb 2025"` alphabetically, which is wrong chronologically).
+- **Blog Post Styling Conventions:** All files under `content/blogs/*.md` must follow a consistent Markdown style:
+  - **Front-matter:** `title` (quoted string), `date` (full month name, e.g. `"March 2025"`, never abbreviated), `description` (non-empty — an empty value parses to Python `None` and renders as the literal string "None" on the blog listing page), `tags`, in that key order.
+  - **Headings:** body content starts at `##` (the front-matter `title` stands in for `<h1>`); no bolded headings (`## **Text**`); no manual section numbering (`## 1. Foo`); Title Case.
+  - **Code fences:** lowercase language tag (` ```python `, ` ```r `, ` ```bash `) — never `` ```R ``, `` ```{r} ``, or a space before the language.
+  - **Lists:** bullets use `* ` (asterisk, single space); ordered lists use `1. ` (single space after the period).
+  - **Horizontal rules:** `---` (three dashes) as section dividers between top-level `##` sections.
+  - **Tables:** header separator rows use explicit left-align syntax, `| :--- | :--- |`.
+  - **Blockquotes:** `> **Label:** text` — space after `>`, colon inside the bold.
+  - **Images:** HTML `<img src="/static/assets/name.ext" width=NNNpx>` (unquoted width, no self-closing slash); the referenced file must actually exist under `content/assets/`.
+  - **Custom heading anchors** (`{#some-id}`) are supported via the Markdown `attr_list` extension enabled in `render_markdown` (`src/portfolio/compiler.py`) — use them only when another post or an in-page link needs to target that heading.
 - **Social Integrations:** Must embed distinct functional icons linking directly to:
   - Email (using standard `mailto:` links)
   - GitHub Page
