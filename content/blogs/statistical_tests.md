@@ -12,7 +12,7 @@ tags:
 
 Choosing a test is less about memorizing names than about answering a few structured questions: how many groups you compare, whether the measurement scale and distribution suit parametric assumptions (normal vs non-normal), how large $n$ is per group, and how you control false positives across multiple tests when you compare many pairs.
 
-Parametric tests (typical $t$-test and ANOVA) assume, among other things, that you are comparing means of roughly continuous data whose residuals (from mean) are *approximately normal* [1, 2]. Non-parametric rank tests relax the normality assumption; they suit *ordinal* data, heavy skew, or outliers [3, 4]. Omnibus tests answer whether any group differs (looking at the big picture); post-hoc tests say *which* pairs differ after an omnibus result (investigating the details).
+Parametric tests (typical $t$-test and ANOVA) assume, among other things, that you are comparing means of roughly continuous data whose residuals (from mean) are *approximately normal*. Non-parametric rank tests relax the normality assumption; they suit *ordinal* data, heavy skew, or outliers. Omnibus tests answer whether any group differs (looking at the big picture); post-hoc tests say *which* pairs differ after an omnibus result (investigating the details).
 
 ---
 
@@ -22,7 +22,7 @@ With two samples (for example, control versus treatment), you ask whether the di
 
 ### Welch’s $t$-Test (Parametric)
 
-The classical **Student $t$-test** assumes *equal variances* in both groups [2]. **Welch’s $t$-test** is the usual default for two independent groups because it does not assume equal variance; it remains valid when group sizes or spreads differ [5].
+The classical **Student $t$-test** assumes *equal variances* in both groups. **Welch’s $t$-test** is the usual default for two independent groups because it does not assume equal variance; it remains valid when group sizes or spreads differ.
 
 Use it when outcomes are continuous (or treated as such), approximately normal within each group (or $n$ is large enough that the logic below applies), and intervals between values are meaningful.
 
@@ -34,7 +34,7 @@ $$
 
 ### Mann–Whitney $U$ Test (Non-Parametric)
 
-When distributions are strongly skewed, have heavy tails, or are ordinal, comparing means with a $t$-test can mislead. The **Mann–Whitney $U$ test** ranks all observations together and compares rank sums between groups [3]. It does not assume a bell-shaped distribution; it asks whether one group tends to produce larger values than the other. For details, see [here](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test).
+When distributions are strongly skewed, have heavy tails, or are ordinal, comparing means with a $t$-test can mislead. The **Mann–Whitney $U$ test** ranks all observations together and compares rank sums between groups. It does not assume a bell-shaped distribution; it asks whether one group tends to produce larger values than the other. For details, see [here](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test).
 
 ---
 
@@ -61,16 +61,16 @@ The standard pattern for testing multiple groups is a two-stage analysis:
 
 ### Stage 1: “Is Anything Different?” (Omnibus)
 
-**One-way ANOVA (parametric)** tests whether any group mean differs from the others [1]. A significant result means “not all means are equal”; it does not name which pairs differ.
+**One-way ANOVA (parametric)** tests whether any group mean differs from the others. A significant result means “not all means are equal”; it does not name which pairs differ.
 
-**Kruskal–Wallis** is the rank-based analogue for three or more groups when normality is doubtful or data are ordinal [4]. Like the Mann–Whitney test, it works on ranks.
+**Kruskal–Wallis** is the rank-based analogue for three or more groups when normality is doubtful or data are ordinal. Like the Mann–Whitney test, it works on ranks.
 
 ### Stage 2: “Which Pairs Differ?” (Post-Hoc)
 
 If Stage 1 is significant at your chosen $\alpha$ (often $0.05$), use post-hoc comparisons to localize differences.
 
-* After ANOVA, **Tukey’s HSD** (“Honestly Significant Difference”) compares all pairs while controlling the familywise error rate [6].
-* After Kruskal–Wallis, run **pairwise Mann–Whitney** tests and adjust for multiplicity. A simple adjustment is **Bonferroni**: with $m$ comparisons, treat a result as significant only if $p < \alpha / m$ [7, 8]. For example, with $m = 3$ comparisons and $\alpha = 0.05$, require $p < 0.05/3 \approx 0.0167$.
+* After ANOVA, **Tukey’s HSD** (“Honestly Significant Difference”) compares all pairs while controlling the familywise error rate.
+* After Kruskal–Wallis, run **pairwise Mann–Whitney** tests and adjust for multiplicity. A simple adjustment is **Bonferroni**: with $m$ comparisons, treat a result as significant only if $p < \alpha / m$. For example, with $m = 3$ comparisons and $\alpha = 0.05$, require $p < 0.05/3 \approx 0.0167$.
 
 **When to avoid Bonferroni correction**: With many groups, $m$ grows quickly (ten groups imply forty-five pairs), so Bonferroni becomes very strict unless $n$ is large or effects are strong. Bonferroni is conservative: it controls Type I errors tightly, but that same strictness often costs *power*, causing you to miss real effects (Type II errors). Reserve it for cases where a single false positive is genuinely costly. Otherwise, a less punishing correction like **FDR (False Discovery Rate, via Benjamini–Hochberg)** is usually preferable — it's the standard choice in omics data analysis, where thousands of features are tested at once.
 
@@ -96,15 +96,15 @@ To sum up, prefer Bonferroni when a single false positive in the family is unacc
 
 ## How Sample Size Changes the Decision
 
-Per-group sample size **$n$** changes what you can assume and how much you should trust a normality check. There is no universal maximum $n$; the important issues are minimum $n$, power, and when the Central Limit Theorem (CLT) makes parametric tests on means reasonable [9].
+Per-group sample size **$n$** changes what you can assume and how much you should trust a normality check. There is no universal maximum $n$; the important issues are minimum $n$, power, and when the Central Limit Theorem (CLT) makes parametric tests on means reasonable.
 
 ### Very Small $n$
 
-With roughly **$n < 5$** per group, estimates of mean and variance are unstable, normality tests are uninformative, and standard asymptotic $p$-values are hard to interpret. Prefer descriptive statistics, exact or permutation methods (see below) where available [12, 13], or collecting more data. Rank tests also need enough distinct ranks to attain small $p$-values; with **$n < 4$** per group in Mann–Whitney, the discrete null distribution may never reach conventional significance.
+With roughly **$n < 5$** per group, estimates of mean and variance are unstable, normality tests are uninformative, and standard asymptotic $p$-values are hard to interpret. Prefer descriptive statistics, exact or permutation methods (see below) where available, or collecting more data. Rank tests also need enough distinct ranks to attain small $p$-values; with **$n < 4$** per group in Mann–Whitney, the discrete null distribution may never reach conventional significance.
 
 ### Moderate $n$ (About 10–30 per Group)
 
-This is the band where a normality diagnostic (for example Shapiro–Wilk on residuals [10]) is most often used as a tie-breaker: it has some power to detect clear non-normality without CLT having fully “smoothed” the sampling distribution of the mean. If normality is plausible, use Welch’s $t$-test or ANOVA; if not, prefer Mann–Whitney or Kruskal–Wallis. For borderline $n$, aim for at least **$n > 10$–$15$** per group before leaning hard on parametric tests when shapes are visibly odd.
+This is the band where a normality diagnostic (for example Shapiro–Wilk on residuals) is most often used as a tie-breaker: it has some power to detect clear non-normality without CLT having fully “smoothed” the sampling distribution of the mean. If normality is plausible, use Welch’s $t$-test or ANOVA; if not, prefer Mann–Whitney or Kruskal–Wallis. For borderline $n$, aim for at least **$n > 10$–$15$** per group before leaning hard on parametric tests when shapes are visibly odd.
 
 ### Large $n$ (Often Cited as $n \gtrsim 30$ per Group)
 
@@ -118,7 +118,7 @@ The CLT says that the **sampling distribution of the sample mean** tends toward 
 
 ### Ordinal Data and When Large $n$ Does *Not* Default to $t$-Tests
 
-Ordinal scales (1–5 satisfaction, pain grades) do not have equal intervals between levels: the step from 1 to 2 is not necessarily comparable to 4 to 5 [11]. Means and $t$-tests assume a scale where averaging is meaningful. For ordinal outcomes, Mann–Whitney and Kruskal–Wallis remain appropriate even at very large $n$; CLT on the mean does not fix an inappropriate mean for the measurement scale.
+Ordinal scales (1–5 satisfaction, pain grades) do not have equal intervals between levels: the step from 1 to 2 is not necessarily comparable to 4 to 5. Means and $t$-tests assume a scale where averaging is meaningful. For ordinal outcomes, Mann–Whitney and Kruskal–Wallis remain appropriate even at very large $n$; CLT on the mean does not fix an inappropriate mean for the measurement scale.
 
 ---
 
@@ -139,7 +139,7 @@ Use the table below together with the quick reference: pick the test family from
 
 **Rules of thumb:** With small $n$, stay conservative and prefer non-parametric or exact methods. With large $n$ on continuous outcomes, parametric tests on means are often justified despite mild non-normality. For two-group parametric comparisons with unequal variance or unequal $n$, use Welch’s formulation. Always align the test with the scale of measurement (continuous vs ordinal), not only with $n$ and $p$-values.
 
-For normality checking, Shapiro–Wilk is common on small-to-moderate samples [10]; on large $n$, trivial departures from normality may test “significant” while still being irrelevant for mean-based inference—use judgment, plots (histograms, Q–Q), and domain knowledge. Permutation tests [12, 13] and bootstrap confidence intervals [14] are useful complements when assumptions are doubtful or samples are small; see **Permutation tests** and **Bootstrapping** below.
+For normality checking, Shapiro–Wilk is common on small-to-moderate samples; on large $n$, trivial departures from normality may test “significant” while still being irrelevant for mean-based inference—use judgment, plots (histograms, Q–Q), and domain knowledge. Permutation tests and bootstrap confidence intervals are useful complements when assumptions are doubtful or samples are small; see **Permutation tests** and **Bootstrapping** below.
 
 ---
 
@@ -147,7 +147,7 @@ For normality checking, Shapiro–Wilk is common on small-to-moderate samples [1
 
 ### What Permutation Tests Do
 
-Under the null hypothesis, some labels or assignments are exchangeable—for example, which observations belong to group A versus B might not matter if both groups are draws from the same distribution. A permutation test reshuffles those assignments (or applies permutations consistent with the stated null), recomputes your statistic each time (difference of means, rank sum, etc.), and builds an empirical null distribution [12, 13]. That distribution answers how extreme your *observed* statistic would be if the null were true. The goal is usually a $p$-value, not a confidence interval.
+Under the null hypothesis, some labels or assignments are exchangeable—for example, which observations belong to group A versus B might not matter if both groups are draws from the same distribution. A permutation test reshuffles those assignments (or applies permutations consistent with the stated null), recomputes your statistic each time (difference of means, rank sum, etc.), and builds an empirical null distribution. That distribution answers how extreme your *observed* statistic would be if the null were true. The goal is usually a $p$-value, not a confidence interval.
 
 ### Permutation $p$-Values
 
@@ -171,7 +171,7 @@ An implementation for a *difference of means* using `scipy.stats.permutation_tes
 
 ### What Bootstrapping Does
 
-The bootstrap treats your observed sample as a stand-in for the population. You draw many *bootstrap samples* by **resampling with replacement** from the original data (same sample size per group, or a structure that matches your design—for example independent resampling within each group for a two-sample comparison). For each replicate you compute your statistic (difference of means, median, correlation, etc.). The resulting distribution approximates *sampling variability* of that estimator under repeated sampling [14].
+The bootstrap treats your observed sample as a stand-in for the population. You draw many *bootstrap samples* by **resampling with replacement** from the original data (same sample size per group, or a structure that matches your design—for example independent resampling within each group for a two-sample comparison). For each replicate you compute your statistic (difference of means, median, correlation, etc.). The resulting distribution approximates *sampling variability* of that estimator under repeated sampling.
 
 ### Bootstrap Confidence Intervals
 
@@ -179,7 +179,7 @@ The usual *percentile bootstrap interval* takes many bootstrap values of the sta
 
 ### How This Complements Test Choice
 
-Like permutation tests (see **Permutation tests** above), the bootstrap earns its keep when normality or other parametric assumptions are doubtful, or per-group $n$ is small [12, 13]. Reach for it specifically when the question is about an *interval* — how uncertain is this effect size — rather than a $p$-value. Neither method replaces careful design or a scale-appropriate test; both extend the toolkit for when classical assumptions don't hold.
+Like permutation tests (see **Permutation tests** above), the bootstrap earns its keep when normality or other parametric assumptions are doubtful, or per-group $n$ is small. Reach for it specifically when the question is about an *interval* — how uncertain is this effect size — rather than a $p$-value. Neither method replaces careful design or a scale-appropriate test; both extend the toolkit for when classical assumptions don't hold.
 
 ### Limitations
 
@@ -333,24 +333,4 @@ boot = stats.bootstrap(
 print("Bootstrap 95% CI for mean(g0) - mean(g1):", boot.confidence_interval)
 ```
 
-I hope the sections above serve as a concise, practical guide to choosing a statistical test that fits your question and your data. The numbered references keep author names and publication years in view—deliberately so—as a small acknowledgment of the researchers whose work, spanning more than a century, still underpins how we design and interpret analyses today.
-
----
-
-## References
-
-1. Fisher, R. A. (1925). *Statistical methods for research workers*. Oliver and Boyd.
-2. Student. (1908). The probable error of a mean. *Biometrika*, *6*(1), 1–25. [https://doi.org/10.2307/2331554](https://doi.org/10.2307/2331554)
-3. Mann, H. B., & Whitney, D. R. (1947). On a test of whether one of two random variables is stochastically larger than the other. *The Annals of Mathematical Statistics*, *18*(1), 50–60. [https://doi.org/10.1214/aoms/1177730491](https://doi.org/10.1214/aoms/1177730491)
-4. Kruskal, W. H., & Wallis, W. A. (1952). Use of ranks in one-criterion variance analysis. *Journal of the American Statistical Association*, *47*(260), 583–621. [https://doi.org/10.1080/01621459.1952.10483441](https://doi.org/10.1080/01621459.1952.10483441)
-5. Welch, B. L. (1947). The generalization of “Student’s” problem when several different population variances are involved. *Biometrika*, *34*(1–2), 28–35. [https://doi.org/10.1093/biomet/34.1-2.28](https://doi.org/10.1093/biomet/34.1-2.28)
-6. Tukey, J. W. (1949). Comparing individual means in the analysis of variance. *Biometrics*, *5*(2), 99–114. [https://doi.org/10.2307/3001913](https://doi.org/10.2307/3001913)
-7. Bonferroni, C. E. (1936). Teoria statistica delle classi e calcolo delle probabilità. *Pubblicazioni del R Istituto Superiore di Scienze Economiche e Commerciali di Firenze*, *8*, 3–62.
-8. Miller, R. G. (1981). *Simultaneous statistical inference* (2nd ed.). Springer-Verlag.
-9. Casella, G., & Berger, R. L. (2002). *Statistical inference* (2nd ed.). Duxbury Press.
-10. Shapiro, S. S., & Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). *Biometrika*, *52*(3–4), 591–611. [https://doi.org/10.1093/biomet/52.3-4.591](https://doi.org/10.1093/biomet/52.3-4.591)
-11. Stevens, S. S. (1946). On the theory of scales of measurement. *Science*, *103*(2684), 677–680. [https://doi.org/10.1126/science.103.2684.677](https://doi.org/10.1126/science.103.2684.677)
-12. Fisher, R. A. (1935). *The design of experiments*. Oliver and Boyd.
-13. Good, P. I. (2005). *Permutation, parametric, and bootstrap tests of hypotheses* (3rd ed.). Springer.
-14. Efron, B., & Tibshirani, R. J. (1993). *An introduction to the bootstrap*. Chapman and Hall.
-
+I hope the sections above serve as a concise, practical guide to choosing a statistical test that fits your question and your data.
