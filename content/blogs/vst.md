@@ -4,7 +4,7 @@ date: May 2025
 description: How mean-variance dependence in RNA-seq counts distorts PCA and clustering, and how DESeq2's variance-stabilizing transformation (VST) fixes it.
 tags:
   - Bioinformatics
-  - RNA-seq
+  - Bulk RNA-seq
 ---
 
 
@@ -18,15 +18,15 @@ In RNA-seq, the relationship between mean ($\mu$) and variance ($\sigma^2$) is r
 
 $$\sigma^2 \approx \mu + \alpha \mu^2$$
 
-*(Where* $\alpha$ is the dispersion parameter).
+*(Where* $\alpha$ is the dispersion parameter and $\alpha \mu^2$ is attributed to biological variation).
 
-Because the variance grows as the mean increases, highly expressed genes have much larger absolute fluctuations in their raw counts compared to lowly expressed genes.
+Because the variance grows as the mean increases, highly expressed genes have much larger absolute fluctuations in their raw counts than lowly expressed genes. If left uncorrected, this discrepancy biases our interpretation of the data.
 
 ---
 
 ## The "Dominant Signal" Problem
 
-When you perform *EDA*—such as Principal Component Analysis (PCA) or Hierarchical Clustering—the algorithms look for the sources of greatest variation.
+When you perform EDA, such as Principal Component Analysis (PCA) or Hierarchical Clustering, the algorithms look for the sources of greatest variation.
 
 * If a gene has a mean of 10,000, a 10% biological change looks like a difference of 1,000 counts.
 * However, if a gene has a mean of 10, a 10% biological change is only 1 count.
@@ -35,23 +35,28 @@ Even though both genes changed by the same percentage, the highly expressed gene
 
 In summary, by removing the dependence of variance on the mean:
 
-* *Distance measures* (like Euclidean distance) become more meaningful.
-* *Lowly expressed genes* contribute equally to the clustering as highly expressed genes.
-* The *true biological signal* (e.g., treatment vs. control) becomes easier to see, as it is no longer buried under the "shot noise" (see [below](#shot-noise)) of high-count genes.
+* Distance measures (like Euclidean distance) become more meaningful.
+* Lowly expressed genes contribute equally to the clustering as highly expressed genes.
+* The true biological signal (e.g., treatment vs. control) becomes easier to see, as it is no longer buried under the "shot noise" (see [below](#shot-noise)) of high-count genes.
 
 So the diagnosis is clear: the mean-variance relationship is drowning out the signal we actually care about. The fix is a transformation designed specifically to break that relationship.
 
+
+> **Note:** If you'd like a quick review of PCA and Hierarchical Clustering first, check out my posts on these topics: [PCA](/blogs/pca.html) and [Clustering](/blogs/clustering.html).
+
 ---
 
-## "Leveling the Playing Field"
+## Leveling the Playing Field
 
-To fix this, we need a *Transformation* that stabilizes the variance (homoscedasticity). We want a state where:
+To fix this, we need a transformation that stabilizes the variance (*e.g.* make data homoscedastic). In other words, we want a state where:
 
 $$\sigma^2 \approx constant$$
 
-In `DESeq2`, this is usually achieved through two methods:
+The transformation itself is not trivial, but thankfully the bioinformatics community has built tools that handle it elegantly. One of the gold-standard tools is the R `DESeq2` package, developed by [*Love et al. (2014)*](https://pubmed.ncbi.nlm.nih.gov/25516281/) and distributed via [Bioconductor](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). A Python equivalent, [PyDESeq2](https://academic.oup.com/bioinformatics/article/39/9/btad547/7260507), was released by *Muzellec et al. (2023)*. While the original DESeq2 is a great tool, as a long-time Python developer I use PyDESeq2 in my bulk RNA-seq analysis pipeline. In this blog, I've included both R and Python code snippets for interested readers.
 
-1. **Vst (Variance Stabilizing Transformation):** Fits a model to the mean-variance relationship and transforms the data so the variance is independent of the mean. See [How Does VST Work Under the Hood?](#vst-implementation).
+Anyhow, in `DESeq2`, this transformation is usually achieved through two methods:
+
+1. **Vst (Variance Stabilizing Transformation):** Fits a model to the mean-variance relationship and transforms the data so the variance is independent of the mean. If you are impatient, see [How Does VST Work Under the Hood?](#vst-implementation) 😉.
 2. **rlog (Regularized Log):** Similar to a log transformation but "shrinks" the values of lowly expressed genes toward the global mean to prevent them from looking like noisy outliers.
 
 ---
@@ -90,9 +95,9 @@ Therefore, increasing sequencing depth ($N$) reduces relative shot noise by $1/\
 
 ### Power Analysis to Overcome Shot Noise
 
-In RNA-seq, "Power" is the probability of correctly rejecting the null hypothesis (i.e., finding a truly differentially expressed gene) given that a true effect exists.
+In statistics, "Power" is the probability of correctly rejecting the null hypothesis (i.e., finding a truly differentially expressed gene in RNA-seq context) given that a true effect exists.
 
-As we discussed above, *shot noise* relative to the signal is $1/\sqrt{\mu}$ . As your sequencing depth increases, $\mu=Lp$ (the average counts per gene) increases, and the "sampling error" component of your variance shrinks. However, there is a point of *diminishing returns*. Once the shot noise is significantly smaller than the biological variation ($\mu \ll \alpha \mu^2$), increasing sequencing depth further will not improve your power; only adding more biological replicates will. In fact, in modern experiments where we get 20–30 million reads per sample, most genes (except the very lowly expressed ones) are in the $\alpha \mu^2 \gg \mu$ category. This is why bioinformaticians almost always tell you to "spend your money on more biological samples, not more reads."
+As we discussed above, *shot noise* relative to the signal is $1/\sqrt{\mu}$ . As your sequencing depth increases, the average counts per gene ($\mu=Lp$, where $L$ is sequencing depth and $p$ is the probability of the gene being sequenced) increases, and the "sampling error" component of your variance shrinks. However, there is a point of *diminishing returns*. Once the shot noise is significantly smaller than the biological variation ($\mu \ll \alpha \mu^2$), increasing sequencing depth further will not improve your power; only adding more biological replicates will. In fact, in modern experiments where we get 20–30 million reads per sample, most genes (except the very lowly expressed ones) are in the $\mu \ll \alpha \mu^2$ category. This is why bioinformaticians almost always tell you to "spend your money on more biological replicates, not more reads."
 
 To assess the power of your experiment and determine if your sequencing depth is sufficient to overcome shot noise, we typically look at the *Power Analysis*. The power ($1-\beta$) of your study is a function of four variables:
 
@@ -101,7 +106,7 @@ To assess the power of your experiment and determine if your sequencing depth is
 * **Sequencing Depth (**$L$): This directly impacts the magnitude of *shot noise*.
 * **Dispersion (**$\alpha$): The biological "noise" or overdispersion.
 
-A common way to estimate this is using the `RNASeqPower` package or the `ssizeRNA` package. Here is a conceptual example of how you would calculate the power needed to detect a 2-fold change:
+A common way to estimate this is using the `RNASeqPower` package or the `ssizeRNA` package in R. Here is a conceptual example of how you would calculate the power needed to detect a 2-fold change:
 
 ```r
 # BiocManager::install("RNASeqPower")
@@ -137,16 +142,13 @@ power = analysis.power(effect_size=effect_size, nobs1=3, alpha=0.05, ratio=1.0)
 print(f"Power to detect 2-fold change: {power:.2f}")
 ```
 
-In addition, bioinformaticians often use *Saturation Curves* to rule out whether sequencing depth is sufficient. We randomly sub-sample the reads (e.g., $10\%$, $25\%$, $50\%$ of the total library) and re-run the differential expression analysis.
-
-* If the number of detected genes keeps increasing linearly, you are *"Under-sequenced"* (limited by shot noise).
-* If the curve flattens out, you have *"Saturated"* your library; the remaining noise is biological, and more sequencing won't help.
+In addition, bioinformaticians often use *Saturation Curves* to rule out whether sequencing depth is sufficient. Briefly, to do that, we randomly sub-sample the reads (e.g., $10\%$, $25\%$, $50\%$ of the total library) and re-run the differential expression analysis pipeline. If the number of detected genes keeps increasing linearly, we are *"Under-sequenced"* (limited by shot noise). However, if the curve flattens out, we have *"Saturated"* our library; the remaining noise is biological, and more sequencing won't help.
 
 ---
 
 ## The "Overdispersion" Category of Variance
 
-In real biological samples, the total variance we observe is usually *greater* than the shot noise alone. This is called *overdispersion*.
+As we saw earlier, in real biological samples, the total variance we observe is usually greater than the shot noise alone. This is called **overdispersion**.
 
 $$\text{Total Variance} = \underbrace{\mu}_{\text{Shot Noise}} + \underbrace{\alpha\mu^2}_{\text{Biological Variation}}$$
 
@@ -156,9 +158,9 @@ Tools like `DESeq2` are designed to separate this "shot noise" (which is just sa
 
 ## How Does VST Work Under the Hood? {#vst-implementation}
 
-Here is how the function is typically invoked: `vst(object, blind = TRUE, nsub = 1000)`.
+Earlier in the blog, we explained that VST is necessary to minimize variance dependence on mean. Here, we will explore how it works under the hood. Here is how the function is typically invoked: `vst(object, blind = TRUE, nsub = 1000)`.
 
-* **`blind = TRUE` (Recommended for EDA):** This tells the function to ignore your experimental groups (Control vs. Treated) when calculating the dispersion trend. Calculates variance across *all samples* as a single pool, ignoring group labels. It provides an unbiased look at the data. If we use the design to "help" the transformation, we might hide batch effects or outliers. This is "best practice" for PCA or Heatmaps to ensure we aren't introducing bias into your visualization.
+* **`blind = TRUE` (Recommended for EDA):** This tells the function to ignore your experimental groups (Control vs. Treated) when calculating the dispersion trend. Calculates variance across all samples as a single pool, ignoring group labels. It provides an unbiased look at the data. If we use the design to "help" the transformation, we might hide batch effects or outliers. This is "best practice" for PCA or Heatmaps to ensure we aren't introducing bias into your visualization.
 
 * **`blind = FALSE`:** Calculates variance *within groups* defined in our `design(dds)`. Best used for calculating Log2FC.
 
@@ -307,7 +309,9 @@ In `PyDESeq2`, the fitted trend coefficients ($a_0$ and $a_1$ in $\alpha_{tr}(\m
 print(dds.uns["trend_coeffs"])
 ```
 
-### Comparison of VST and rlog (The DESeq2 Rival)
+### Comparison of VST and rlog
+
+We didn't cover `rlog` in this blog, but the table below can serve as a high-level guide:
 
 | Feature         | `vst()`                    | `rlog()`                      |
 | :--------------- | :-------------------------- | :----------------------------- |
@@ -318,74 +322,4 @@ print(dds.uns["trend_coeffs"])
 
 ---
 
-## What is Size Factor in VSD Data?
-
-In a `DESeq2` workflow, the *Size Factor* is a normalization constant calculated for each sample. It is designed to correct for differences in *library size* (total number of reads) and *RNA composition* across our samples.
-
-When we see them in the `colData` of a `vst` object, they represent the scaling values used to bring all samples to a common scale before the variance was stabilized. Now let's deep-dive into it:
-
-### Problem
-
-Raw counts are not directly comparable because of sequencing depth. If Sample A was sequenced twice as deeply as Sample B, Gene X will appear to have twice as many counts in Sample A, even if the biological expression is identical.
-
-We model the observed count $K_{ij}$ for gene $i$ in sample $j$ as:
-
-$$K_{ij} \sim NB(\mu_{ij} = s_j q_{ij}, \alpha_i)$$
-
-Where:
-
-* $s_j$: The *Size Factor* for sample $j$.
-* $q_{ij}$: The true (normalized) biological expression.
-
-### How Size Factors Are Calculated
-
-`DESeq2` uses the *Median of Ratios* method. This is more robust than simply dividing by the total number of reads because it isn't skewed by a few extremely highly expressed genes.
-
-The formula for the size factor of sample $j$ is:
-
-$$s_j = median(\frac{k_{ij}}{(\prod_{m=1}^n k_{im})^{1/n}})$$
-
-1. **Geometric Mean:** For each gene $i$, calculate the geometric mean across all $n$ samples. This creates a "pseudo-reference" sample.
-2. **Ratios:** Divide the observed counts in sample $j$ by this reference.
-3. **Median:** Take the median of these ratios across all genes. This median is $s_j$.
-
-### Presence in `colData(vsd)`
-
-When we run `vst(dds)`, the function checks the `colData` of our `DESeqDataSet` object.
-
-* If size factors were already calculated (via `estimateSizeFactors()`), VST uses them.
-* If not, VST calculates them internally.
-
-The `vsd` object preserves these in its metadata so we can track how much each sample was scaled.
-
-* A size factor of **1.0** means the sample depth is exactly at the "average" of the experiment.
-* A size factor of **2.0** means the sample had roughly twice the sequencing depth of the average and its counts were divided by 2 during normalization.
-
-### Role in PCA and Covariance
-
-Before the PCA can find the rotation matrix (eigenvectors), the data must be on the same scale. If we didn't use size factors, our **PC1** would likely just show "Sequencing Depth" rather than "Biological Treatment," because the variance of the raw library sizes would be the largest source of variation in the covariance matrix. We will cover PCA analysis in a [dedicated post](/blogs/pca.html).
-
-### Accessing Them in R
-
-We can extract these factors from our VST object to check for outliers (e.g., a sample with a size factor of 0.1 might have failed sequencing):
-
-```r
-# Extract size factors from the metadata
-size_factors <- sizeFactors(vsd)
-
-# Or look at the full colData
-head(colData(vsd))
-```
-
-In `PyDESeq2`, size factors live in the sample-level metadata (`obs`) of the `DeseqDataSet`, right alongside the rest of the sample annotations:
-
-```python
-# Fits size factors if not already computed
-dds.fit_size_factors()
-
-# Extract size factors
-size_factors = dds.obs["size_factors"]
-
-# Or look at the full sample metadata
-print(dds.obs.head())
-```
+That brings us to the end of this blog. If you're curious to dig deeper into the theory, I highly recommend reading the published research papers I shared above. Hope you find this post useful! 😊
