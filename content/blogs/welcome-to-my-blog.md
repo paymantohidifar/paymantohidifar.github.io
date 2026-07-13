@@ -6,11 +6,12 @@ tags:
   - AIxBio
   - Computational Biology
 ---
-Welcome! This is the first post on my new portfolio site.
+## What to Expect
 
-I plan to write here about computational biology, bioinformatics, SWE notes about computational biology, and the
-growing overlap between AI and life sciences (AIxBio). Expect notes on
-papers I find interesting, tools I build, and lessons from the lab bench and
-the command line alike.
+This is the first post on my new portfolio site.
+
+I'll be writing about computational biology, bioinformatics, software DevOps, and the growing overlap between AI and life sciences (AIxBio) — notes on papers and blogs I find interesting, tools I or others build, and lessons from my day-to-day research work.
+
+Posts that reference or summarize external blogs or papers are tagged `external`.
 
 Thanks for stopping by.
