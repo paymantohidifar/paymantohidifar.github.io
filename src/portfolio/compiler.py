@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import re
 import shutil
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Match, Tuple
 
 import markdown
 import yaml
@@ -57,14 +58,38 @@ def parse_front_matter(raw_content: str) -> Tuple[Dict[str, Any], str]:
     return metadata, parts[2]
 
 
+_MATH_PATTERN = re.compile(r"\$\$.+?\$\$|\$[^\$\n]+?\$", re.DOTALL)
+
+
 def render_markdown(text: str) -> str:
-    """Converts a Markdown body into HTML using the standard extension set."""
-    return markdown.Markdown(
+    """Converts a Markdown body into HTML using the standard extension set.
+
+    LaTeX spans ($$...$$ and $...$) are stashed behind alphanumeric
+    placeholders before conversion and restored afterwards, so that
+    Python-Markdown's underscore-emphasis rule can't mangle TeX macros like
+    `\\underbrace{\\mu}_{\\text{Shot Noise}}` that contain paired underscores.
+    Restored spans are HTML-escaped (<, >, &) since raw comparison operators
+    like `$n<10$` would otherwise be read as the start of an HTML tag.
+    """
+    math_spans: List[str] = []
+
+    def _stash(match: Match[str]) -> str:
+        math_spans.append(match.group(0))
+        return f"MATHSPANPLACEHOLDER{len(math_spans) - 1}ENDPLACEHOLDER"
+
+    protected_text = _MATH_PATTERN.sub(_stash, text)
+    html = markdown.Markdown(
         extensions=["fenced_code", "tables", "codehilite", "attr_list"],
         extension_configs={
             "codehilite": {"guess_lang": False, "css_class": "codehilite"}
         },
-    ).convert(text)
+    ).convert(protected_text)
+    for index, math in enumerate(math_spans):
+        escaped_math = (
+            math.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        )
+        html = html.replace(f"MATHSPANPLACEHOLDER{index}ENDPLACEHOLDER", escaped_math)
+    return html
 
 
 _DATE_FORMATS = ("%Y-%m-%d", "%B %Y", "%b %Y")
