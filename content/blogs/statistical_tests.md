@@ -10,9 +10,11 @@ tags:
 
 ## Introduction
 
+As a scientist in the biological field, we constantly need to analyze and interpret datasets with varying size and nature. Our decisions or conclusions often rely on statistical tests. There are several statistical tests out there, each suiting different scientific questions, so it's quite important to choose the right one. In this blog, I try to review a number of common statistical tests by giving examples and code snippets. Hopefully, you will find it helpful!
+
 Choosing a test is less about memorizing names than about answering a few structured questions: how many groups you compare, whether the measurement scale and distribution suit parametric assumptions (normal vs non-normal), how large $n$ is per group, and how you control false positives across multiple tests when you compare many pairs.
 
-Parametric tests (typical $t$-test and ANOVA) assume, among other things, that you are comparing means of roughly continuous data whose residuals (from mean) are *approximately normal*. Non-parametric rank tests relax the normality assumption; they suit *ordinal* data, heavy skew, or outliers. Omnibus tests answer whether any group differs (looking at the big picture); post-hoc tests say *which* pairs differ after an omnibus result (investigating the details).
+Parametric tests (typical $t$-test and ANOVA) assume, among other things, that you are comparing means of roughly continuous data whose residuals (from mean) are approximately normal. Non-parametric rank tests relax the normality assumption; they suit ordinal data, heavy skew, or outliers. Omnibus tests answer whether any group differs (looking at the big picture); post-hoc tests say which pairs differ after an omnibus result (investigating the details).
 
 ---
 
@@ -22,9 +24,9 @@ With two samples (for example, control versus treatment), you ask whether the di
 
 ### Welch’s $t$-Test (Parametric)
 
-The classical **Student $t$-test** assumes *equal variances* in both groups. **Welch’s $t$-test** is the usual default for two independent groups because it does not assume equal variance; it remains valid when group sizes or spreads differ.
+The classical **Student $t$-test** assumes equal variances in both groups. **Welch’s $t$-test** is the usual default for two independent groups because it does not assume equal variance; it remains valid when group sizes or spreads differ.
 
-Use it when outcomes are continuous (or treated as such), approximately normal within each group (or $n$ is large enough that the logic below applies), and intervals between values are meaningful.
+We use it when outcomes are continuous (or treated as such), approximately normal within each group (or $n$ is large enough that the logic below applies), and intervals between values are meaningful.
 
 Welch’s statistic uses separate variance estimates in the denominator:
 
@@ -55,7 +57,7 @@ where $\alpha$ is the per-test Type I error rate and $k$ is the number of pairwi
 | **5 Groups** | 10 | **40.1%** |
 | **10 Groups** | 45 | **90.1%** |
 
-By the time you have 10 groups, you have a **90% chance** of finding a "significant" $p < 0.05$ result even if all your data is just random numbers.
+By the time you have 10 groups, you have a 90% chance of finding a "significant" $p < 0.05$ result even if all your data is just random numbers.
 
 The standard pattern for testing multiple groups is a two-stage analysis:
 
