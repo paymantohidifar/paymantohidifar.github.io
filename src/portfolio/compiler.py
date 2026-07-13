@@ -60,7 +60,7 @@ def parse_front_matter(raw_content: str) -> Tuple[Dict[str, Any], str]:
 def render_markdown(text: str) -> str:
     """Converts a Markdown body into HTML using the standard extension set."""
     return markdown.Markdown(
-        extensions=["fenced_code", "tables", "codehilite"],
+        extensions=["fenced_code", "tables", "codehilite", "attr_list"],
         extension_configs={
             "codehilite": {"guess_lang": False, "css_class": "codehilite"}
         },

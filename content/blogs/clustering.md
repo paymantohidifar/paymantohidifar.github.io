@@ -7,7 +7,7 @@ tags:
   - Unsupervised Machine Learning
   - Clustering
 ---
-## **Introduction**
+## Introduction
 
 In computational biology and broader data science workflows, high-dimensional datasets, such as transcriptomic profiles containing tens of thousands of genes, can quickly become overwhelming. **Clustering** is a fundamental unsupervised learning framework commonly utilized during Exploratory Data Analysis (EDA) to partition observations or features into distinct, non-overlapping groups. By organizing complex, intermediate biological states into structured clusters, we can simplify data interpretation and uncover hidden patterns without the constraint of prior labeling bias.
 
@@ -22,15 +22,15 @@ We will review how different hyperparameters, distance metrics (e.g., Euclidean 
 
 ---
 
-## **How Do We Measure Similarity?**
+## How Do We Measure Similarity?
 
 Before an algorithm can group features, it must answer a foundational question: *What does it mean for two observations to be similar?* In unsupervised learning, "similarity" is inverted and quantified as distance. The closer two points sit in a high-dimensional feature space, the more similar their biological profiles are assumed to be.
 
 The choice of our distance metric is an analytical assumption that dictates exactly what kind of biological signal our algorithm will prioritize. Here, we briefly review the primary mathematical distance frameworks used to gain insight about high-dimensional datasets.
 
-### **1. The Geometric Standards**
+### The Geometric Standards
 
-#### **Euclidean Distance**
+#### Euclidean Distance
 
 The most intuitive and widely used metric, Euclidean distance calculates the ordinary straight-line path between two coordinate vectors, $x$ and $y$, in an $n$-dimensional space:
 
@@ -38,7 +38,7 @@ $$d(x, y) = \sqrt{\sum_{i=1}^n (x_i - y_i)^2}$$
 
 * **When to use:** It is excellent for normalized, continuous data where absolute differences in magnitude represent true physical or biological variance.
 
-#### **Minkowski Distance**
+#### Minkowski Distance
 
 The Minkowski distance is a generalized parametric framework that unifies multiple geometric metrics by introducing an exponent, $p$:
 
@@ -49,11 +49,11 @@ By tuning the value of $p$, we alter how the algorithm penalizes dimensional dif
 * **$p = 1$ (Manhattan / City Block Distance):** Sums the absolute grid-like differences rather than the straight diagonal path, resembling a taxi navigating a rigid urban grid. It is less sensitive to extreme outliers than Euclidean distance.
 * **$p \to \infty$ (Maximum / Chebyshev Distance):** Evaluates only the single dimension exhibiting the greatest coordinate divergence, completely ignoring all other features.
 
-### **2. Specialty Metrics for Omics Workflows**
+### Specialty Metrics for Omics Workflows
 
 Standard geometric distances often struggle when applied to raw biological tracking, where data can be sparse, highly skewed, or scaled differently across experiments. To capture true biological relationships, we rely on specialized metrics:
 
-#### **Canberra Distance**
+#### Canberra Distance
 
 The Canberra distance is a highly sensitive, weighted version of the Manhattan metric that examines the absolute difference normalized by the sum of the coordinates:
 
@@ -61,7 +61,7 @@ $$d(x, y) = \sum_{i=1}^n \frac{|x_i - y_i|}{|x_i| + |y_i|}$$
 
 * **The Biological Advantage:** Because the denominator scales with the magnitude of the values, this metric is exceptionally sensitive to tiny fluctuations near zero. This makes it an ideal choice in genomics and transcriptomics for identifying rare species, low-abundance transcripts, or subtle gene expression changes that would otherwise be completely drowned out by highly expressed housekeeping genes.
 
-#### **Correlation-Based Distance**
+#### Correlation-Based Distance
 
 Instead of measuring physical proximity in space, correlation-based distance focuses entirely on the *behavior* of the features. It uses the Pearson correlation coefficient ($r$) to group samples that exhibit synchronized expression patterns or parallel trends, regardless of whether their absolute baseline numbers match. It is mathematically translated into a distance metric as:
 
@@ -70,11 +70,11 @@ $$d(x, y) = 1 - r \quad \text{or} \quad d(x, y) = 1 - |r|$$
 * **The Biological Advantage:** Imagine two genes that belong to the exact same metabolic pathway; *Gene A* is transcribed at low levels, while *Gene B* is highly abundant. Under an absolute metric like Euclidean distance, these two genes will look completely unrelated. Correlation-based distance, however, will recognize that whenever *Gene A* spikes, *Gene B* spikes in perfect unison, successfully clustering them together based on their shared functional trajectory.
 
 
-### **Calculating Distances**
+### Calculating Distances
 
 To demonstrate these concepts in practice, let’s generate a synthetic toy dataset containing five sample coordinates and evaluate how these distance metrics behave.
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 import numpy as np
@@ -108,9 +108,9 @@ print(pd.DataFrame(squareform(euclidean_distances), index=samples.index, columns
 
 ```
 
-#### **R Implementation**
+#### R Implementation
 
-```R
+```r
 # Set random seed for reproducibility
 set.seed(123)
 
@@ -130,13 +130,13 @@ print(euclidean_distances)
 
 ```
 
-### **Finding the Centroid Vector**
+### Finding the Centroid Vector
 
 In centroid-based clustering algorithms like K-means, a centroid serves as the mathematical center of gravity for a cluster of data points. It is calculated by taking the mean of the coordinates across every feature (or dimension) for all samples assigned to that group. During the K-means optimization cycle, these centroids constantly shift as points change cluster ownership, acting as the dynamic anchors that redefine the boundaries of each group.
 
 To illustrate how a centroid is calculated and how it relates to individual observations, let's compute the global average of our synthetic 2D coordinate space. This allows us to identify which specific samples sit close to the center and which represent geometric outliers at the extremes.
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 # Calculate feature-wise column means
@@ -162,9 +162,9 @@ print(f"Farthest point from mean: {dist_from_mean.idxmax()}")
 
 ```
 
-#### **R Implementation**
+#### R Implementation
 
-```R
+```r
 # Calculate feature-wise column means
 samples_mean <- colMeans(samples)
 
@@ -186,13 +186,13 @@ Now that we have covered distance metrics and centroid calculations, let’s mov
 
 ---
 
-## **K-Means Clustering**
+## K-Means Clustering
  
 The K-means algorithm is an iterative, partitioning method designed to divide $n$ samples into a pre-defined number ($k$) of uniform, homogenous clusters based on their feature-space proximity or similarity (see above).
 
 To see this clustering mechanism in action, we will utilize the [*giris dataset*](https://github.com/UCLouvain-CBIO/rWSBIM1322/blob/master/data/giris.rda) sourced from the *UCLouvain rWSBIM1322 bioinformatics curriculum*. This dataset models the expression profiles of 4 distinct genes across 150 oncology patients, who are clinically stratified into three categorical groups (GRADE *A, B, or C*). The original repository hosts this dataset in an R-specific `.rda` format but the data here is pre-converted to `.csv` format for simplicity.
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 import pandas as pd
@@ -212,9 +212,9 @@ giris_km.head()
 
 ```
 
-#### **R Implementation**
+#### R Implementation
 
-```R
+```r
 # Fetch the dataset from BioConductor / UCLouvain repository
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 if (!requireNamespace("rWSBIM1322", quietly = TRUE)) BiocManager::install("UCLouvain-CBIO/rWSBIM1322")
@@ -231,11 +231,11 @@ giris_km <- cbind(giris, k_cluster = as.factor(km_result$cluster))
 
 ```
 
-### **Visualizing High-Dimensional Clusters via PCA Projections**
+### Visualizing High-Dimensional Clusters via PCA Projections
 
 Visualizing a 4-dimensional gene space directly is impossible for us. Because K-means and Principal Component Analysis (PCA) are both fundamentally grounded in minimizing squared Euclidean distance metrics, we project our samples onto the first two principal components ($PC1$ and $PC2$) to evaluate the quality of our clustering.
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 import seaborn as sns
@@ -270,9 +270,9 @@ plt.show()
 
 ```
 
-#### **R Implementation**
+#### R Implementation
 
-```R
+```r
 library(factoextra)
 library(patchwork)
 
@@ -287,7 +287,7 @@ print(p1 / p2)
 
 ```
 
-### **Determining the Optimal Number of Clusters ($k$)**
+### Determining the Optimal Number of Clusters ($k$)
 
 Choosing the right number of clusters ($k$) is one of the most critical decisions in partitioning algorithms such as K-means. Without a baseline biological hypothesis (such as expecting three distinct cell types or two disease subtypes), selecting $k$ purely by guesswork can introduce bias or over-partition the data into meaningless subgroups.
 
@@ -305,7 +305,7 @@ Where:
 
 In plain terms, WCSS calculates how "tight" or compact our clusters are. A lower WCSS means the data points sit very close to their respective centroids, signaling highly homogeneous groups.
 
-#### **The Optimization Trade-Off**
+#### The Optimization Trade-Off
 
 It might seem intuitive to simply choose the $k$ value that yields the lowest possible WCSS. However, there is a catch: as $k$ increases, WCSS will always decrease. If we set $k$ equal to the total number of samples ($k = n$), every single data point becomes its own individual cluster center. At that extreme, the distance between each point and its centroid is exactly zero, resulting in a perfect $\text{WCSS} = 0$. While mathematically minimal, this model is completely useless because it summarizes nothing.
 
@@ -316,7 +316,7 @@ The goal is to find the sweet spot where adding another cluster center no longer
 
 The optimal value corresponds to the inflection point or the "elbow" of the curve, the precise step where the steep drop abruptly transitions into a flat plateau. Choosing the $k$ at this elbow ensures that our model captures the genuine, macro-level structure of the data without overfitting to minor, localized variance.
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 k_values = range(1, 6)
@@ -332,9 +332,9 @@ plt.show()
 
 ```
 
-#### **R Implementation**
+#### R Implementation
 
-```R
+```r
 k_values <- 1:5
 wcss_values <- sapply(k_values, function(k) {
   kmeans(giris[, 1:4], centers = k, nstart = 15)$tot.withinss
@@ -348,17 +348,17 @@ plot(k_values, wcss_values, type = 'b', pch = 19, col = "darkred",
 
 ---
 
-## **Hierarchical Clustering (Agglomerative)**
+## Hierarchical Clustering (Agglomerative)
 
 Unlike K-means, which partitions data into a fixed number of clusters upfront, Agglomerative Hierarchical Clustering constructs a bottom-up, nested tree structure known as a **dendrogram**. The algorithm initializes by treating every individual observation as a single-element cluster. It then recursively merges the two "closest" clusters based on a selected proximity metric until the entire dataset is unified into a single root cluster.
 
-### **Linkage Criteria: Quantifying Proximity Between Clusters**
+### Linkage Criteria: Quantifying Proximity Between Clusters
 
 While a distance metric (such as Euclidean or Manhattan) defines the proximity between two individual points, a **linkage criterion** determines how the distance matrix updates when evaluating the proximity between entire groups of points. The choice of linkage fundamentally shapes the topology of the resulting tree and the geometry of the final clusters.
 
 Here, we review four common linkage criteria:
 
-#### **1. Complete Linkage (Maximum Linkage)**
+#### Complete Linkage (Maximum Linkage)
 
 Complete linkage defines the distance between two clusters, $A$ and $B$, as the maximum distance between any single point in $A$ and any single point in $B$:
 
@@ -367,7 +367,7 @@ $$D(A, B) = \max \{ d(x, y) : x \in A, y \in B \}$$
 * **Behavior:** It forces clusters to be conservative. A merge will only happen if *all* pairs of points are relatively close.
 * **Morphology:** This yields compact, highly tightly bound, and uniform spherical cluster boundaries. It works well when we want to avoid loose, elongated groupings.
 
-#### **2. Single Linkage (Minimum Linkage)**
+#### Single Linkage (Minimum Linkage)
 
 Single linkage defines the distance between two clusters as the minimum distance between any single point in $A$ and any single point in $B$:
 
@@ -376,7 +376,7 @@ $$D(A, B) = \min \{ d(x, y) : x \in A, y \in B \}$$
 * **Behavior:** It is highly sensitive to early proximity. If even a single point on the perimeter of cluster $A$ is close to a point on cluster $B$, the two groups will merge.
 * **Morphology:** This frequently suffers from chaining artifacts, where clusters are strung along together in long, non-spherical, snake-like configurations. It is rarely used in standard transcriptomic profiling unless tracking continuous, line-like biological trajectories.
 
-#### **3. Average Linkage (UPGMA)**
+#### Average Linkage (UPGMA)
 
 Average linkage calculates the arithmetic average of all pairwise distances between the elements of cluster $A$ and cluster $B$:
 
@@ -385,7 +385,7 @@ $$D(A, B) = \frac{1}{|A| \cdot |B|} \sum_{x \in A} \sum_{y \in B} d(x, y)$$
 * **Behavior:** By averaging across all structural members, it is far less sensitive to outliers or single-point boundary anomalies than either single or complete linkage.
 * **Morphology:** It represents a stable, robust middle ground that preserves a balanced tree architecture, making it a highly reliable choice for clustering heterogeneous patient sample profiles.
 
-#### **4. Ward’s Minimum Variance Method**
+#### Ward’s Minimum Variance Method
 
 Instead of directly averaging geometric distances, Ward’s method approaches clustering as an analysis of variance (ANOVA) problem. It calculates the distance between two clusters by measuring how much the **Total Within-Cluster Sum of Squares (ESS)** would increase if they were merged:
 
@@ -396,11 +396,11 @@ Where $\mu_A$ and $\mu_B$ represent the respective centroid vectors of the two c
 * **Behavior:** At each step of the hierarchy, the algorithm scans all possible pairwise merges and executes the specific merge that minimizes the total increase in within-cluster variance.
 * **Morphology:** Ward's method actively minimizes internal dispersion. This focus heavily biases the algorithm toward discovering heavily defined, tightly packed, and highly balanced clusters of roughly equal sizes. It is widely considered the gold standard for parsing complex, high-dimensional omics expression matrices.
 
-### **Executing Tree Cuts and Linkage Evaluation**
+### Executing Tree Cuts and Linkage Evaluation
 
 Once a linkage criterion is selected, the hierarchical relationship can be modeled as a tree structure. To transition from this continuous tree down to discrete, actionable cluster assignments, we must perform a "tree cut." We can cut the dendrogram horizontally either at a specific distance threshold ($h$) or by dictating a target number of clusters ($k$):
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
@@ -446,9 +446,9 @@ As a practice, repeat hierarchical clustering using complete-linkage method and 
 
 ***Hint:** `hc_matrix = linkage(giris.iloc[:, 0:4], method='complete', metric='euclidean')`*
 
-#### **R Implementation**
+#### R Implementation
 
-```R
+```r
 # Compute Euclidean distance matrix
 gene_dist <- dist(giris[, 1:4], method = "euclidean")
 
@@ -465,13 +465,13 @@ hc_labels <- cutree(hc_complete, k = 3)
 
 ---
 
-## **Cross-Tabulating Cluster Consistency**
+## Cross-Tabulating Cluster Consistency
 
 A critical validation step in above unsupervised workflows is determining whether different clustering algorithms converge on the same data structures. Because K-means partitions samples globally by optimizing distances to moving centroids, while agglomerative clustering builds relationships recursively from the bottom up, comparing their outputs reveals the structural stability of our sample groups.
 
 To evaluate this consistency, we generate a contingency table (cross-tabulation). Strong diagonal alignments indicate robust, mathematically stable clusters that are independent of the underlying algorithmic mechanics, whereas high off-diagonal scattering highlights ambiguous, transitional samples sitting near cluster boundaries.
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 # Cross-tabulate cluster assignments using a pandas contingency table
@@ -485,16 +485,16 @@ print(contingency_table)
 
 ```
 
-#### **R Implementation**
+#### R Implementation
 
-```R
+```r
 table(giris_km$k_cluster, hc_labels)
 
 ```
 
 ---
 
-## **Summary: Selecting an Appropriate Unsupervised Clustering Approach**
+## Summary: Selecting an Appropriate Unsupervised Clustering Approach
 
 We should note that no single clustering algorithm fits every biological scenario. Choosing between a centroid-based partitioner like K-means and a tree-based framework like hierarchical clustering requires balancing our dataset's dimensional scale against our specific downstream analytical goals.
 
@@ -503,7 +503,7 @@ If our primary objective is to discover clean, spherical cohorts across millions
 The table below provides a structured blueprint to help guide our choice of unsupervised engine based on our data architecture:
 
 | Feature Dimension | K-Means Partitions | Agglomerative Hierarchical |
-| --- | --- | --- |
+| :--- | :--- | :--- |
 | **Cluster Initialization** | Requires an upfront definition of the target integer $k$. | Cluster depth is unconstrained and decided post-hoc by slicing the dendrogram tree. |
 | **Mathematical Stability** | **Non-deterministic:** Initial states depend on random seed configurations; requires multi-start parameters (`n_init`) to avoid local minima. | **Fully deterministic:** Yields the exact same topology every run given the same distance metric and linkage criterion. |
 | **Computational Complexity** | **Linear ($\mathcal{O}(n)$):** Highly scalable and ideal for massive sample pools, such as large patient cohorts or scRNA-seq matrices. | **Quadratic/Cubic ($\mathcal{O}(n^2)$ to $\mathcal{O}(n^3)$):** Computationally intensive; experiences significant performance overhead with large sample dimensions. |

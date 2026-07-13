@@ -7,7 +7,7 @@ tags:
   - WSL2
   - Nextflow
 ---
-### Introduction
+## Introduction
 
 If you've ever tried running EPI2ME on an air-gapped machine, you've likely hit the same wall I did: the app just won't start.
 
@@ -21,7 +21,7 @@ The following plan focuses on installing and configuring all necessary component
 
 ---
 
-### Phase 1: Installing and Setting Up the WSL 2 Instance on Windows
+## Phase 1: Installing and Setting Up the WSL 2 Instance on Windows
 
 To begin, open PowerShell in administrator mode by right-clicking and selecting "Run as administrator." Next, enter the `wsl --install` command and restart your computer to complete the installation. You can view a list of available online distributions using the appropriate command. For additional details, refer to [Microsoft's install guide](https://learn.microsoft.com/en-us/windows/wsl/install).
 
@@ -39,11 +39,11 @@ wsl -d Ubuntu-24.04
 ```
 ---
 
-### Phase 2: Setting Up and Configuring EPI2ME Software Companions on the Online WSL 2 Instance
+## Phase 2: Setting Up and Configuring EPI2ME Software Companions on the Online WSL 2 Instance
 
 This phase assumes your Windows 11 host and WSL 2 instance have full internet access.
 
-#### Step 1: Installing Build Tools and Dependencies
+### Step 1: Installing Build Tools and Dependencies
 
 First, ensure all necessary libraries for compiling tools like Apptainer and handling compressed data are installed:
 
@@ -54,7 +54,7 @@ sudo apt update
 sudo apt install -y build-essential autoconf libtool zlib1g-dev libbz2-dev git wget pkg-config
 ```
 
-#### Step 2: Installing Java
+### Step 2: Installing Java
 
 Since Nextflow depends on Java to operate, we'll begin by installing Java. The process is streamlined with SDKMAN, which should be set up first:
 
@@ -69,7 +69,7 @@ sdk install java 25.0.1-tem
 java --version
 ```
 
-#### Step 3: Installing NextFlow
+### Step 3: Installing NextFlow
 
 Nextflow is the workflow manager utilized by EPI2ME to automate their workflows. You can also use Nextflow to develop your own custom bioinformatics pipelines, providing flexibility and scalability for complex analyses.
 
@@ -81,7 +81,7 @@ sudo mv nextflow /usr/local/bin/
 nextflow info
 ```
 
-#### Step 4: Installing Apptainer
+### Step 4: Installing Apptainer
 
 The most reliable and recommended way to install Apptainer is by building it from source. This ensures you have the latest version and that all necessary dependencies are properly managed. Below are the steps to install Apptainer from source on a Debian or Ubuntu-based system. Since Apptainer is written in Go, you’ll need to have a recent version of Go installed.
 
@@ -120,11 +120,11 @@ apptainer --version
 sudo rm -rf /tmp/apptainer
 ```
 
-#### Step 5: Configuring NextFlow for Offline Local Execution
+### Step 5: Configuring NextFlow for Offline Local Execution
 
 <br>
 
-##### Setting up Environment Variables:
+#### Setting up Environment Variables:
 
 **NXF_OFFLINE**
 
@@ -161,7 +161,7 @@ You could also delete `~/.apptainer/cache` files by running the following comman
 apptainer clean cache
 ```
 
-##### Setting up NextFlow Configuration Files
+#### Setting up NextFlow Configuration Files
 
 To efficiently manage and organize your Nextflow executions, it is best practice to define and utilize three types of configuration files (*Global level*, *Workflow level*, and *Local project level*).
 
@@ -295,7 +295,7 @@ trace {
 ```
 
 
-##### **What Happens Under the Hood When You Run the Pipeline**
+#### What Happens Under the Hood When You Run the Pipeline
 
 NextFlow loads and merges configuration settings in the following order, from lowest to highest priority. Any setting defined later will override a setting defined earlier.
 
@@ -314,7 +314,7 @@ Next, NextFlow reads the workflow's default configuration (Priority 2), followed
 
 Finally, at the highest priority, NextFlow applies any explicitly activated profile, such as `offline_local` (Priority 4). This profile can specify details like CPU and memory requirements or set the executor to ‘local’, and its settings will override any conflicting options from lower-priority configuration files.
 
-##### **An Overview of the NextFlow Filesystem**
+#### An Overview of the NextFlow Filesystem
 
 Here is a brief, clean explanation of the important directories NextFlow uses or generates during a run.
 
@@ -330,11 +330,11 @@ Here is a brief, clean explanation of the important directories NextFlow uses or
 
 <br>
 
-#### Step 6: Project Setup Using EPI2ME Workflows
+### Step 6: Project Setup Using EPI2ME Workflows
 
 This is the most critical step for offline readiness.
 
-##### **Downloading Workflows**
+#### Downloading Workflows
 
 Use the `nextflow pull` command to cache the latest workflow code locally. For example, we can download the bacterial genome assembly workflow (`wf-bacterial-genomes`) from epi2me-labs GitHub using the following command. As explained above, by default, NextFlow would download workflows and store them in `${HOME}/.nextflow/assets`.
 
@@ -343,7 +343,7 @@ Use the `nextflow pull` command to cache the latest workflow code locally. For e
 nextflow pull epi2me-labs/wf-bacterial-genomes
 ```
 
-##### **Downloading Container Images**
+#### Downloading Container Images
 
 Use Apptainer to download and store the required Docker images as local SIF files. Make sure to update the image tag so it matches the exact version needed for your workflow. Repeat this process for each workflow you intend to run. For consistency and reproducibility, retrieve the container tags directly from the workflow’s `nextflow.config` file, as described above.
 
@@ -391,7 +391,7 @@ apptainer pull --force --dir ${containers_dir} docker://${mlst}:${container_sha_
 echo "Done!"
 ```
 
-##### **Setting up Project Directory**
+#### Setting up Project Directory
 
 Setting up a clearly organized project directory is crucial for effective bioinformatics work. By structuring your project with separate folders for raw data, results, scripts, and documentation, you can easily find files, replicate analyses, and collaborate with colleagues. Some common suggestions include:
 
@@ -406,7 +406,7 @@ Setting up a clearly organized project directory is crucial for effective bioinf
 
 Following this organization makes your analyses smoother, supports reproducible research, and facilitates teamwork.
 
-##### **Accessing Windows Files on WSL 2 Instance**
+#### Accessing Windows Files on WSL 2 Instance
 
 WSL automatically mounts all your Windows drives, making them available as standard Linux directories under the `/mnt/` folder. When you run your EPI2ME workflow from within your imported WSL terminal, you must use the WSL path to reference your input files.
 
@@ -420,7 +420,7 @@ nextflow run /path/to/main.nf \
 
 However, note that while you can run NextFlow directly on files located under `/mnt/c/` or `/mnt/d/`, performance is significantly faster if you copy the input files into the Linux file system before starting the run.
 
-##### **Executing Runs**
+#### Executing Runs
 
 Running bioinformatics workflows through Bash scripts, rather than issuing commands directly in the terminal, provides substantial benefits for documentation, debugging, and reproducibility. By scripting your workflow, you create a comprehensive record of each step, making it much easier to track modifications, share procedures with collaborators, and revisit your analyses later. If any issues occur during execution, the script serves as a transparent log that can be systematically reviewed and debugged, helping to ensure that your results are both reproducible and verifiable.
 
@@ -439,7 +439,7 @@ nextflow -c ../config/nextflow.config \
      --isolates true
 ```
 
-##### **Removing Unnecessary Files**
+#### Removing Unnecessary Files
 
 Below is a reliable list of files and directories you can safely remove after a successful NextFlow run to free up disk space—while ensuring your final results remain intact.
 
@@ -468,10 +468,10 @@ rm -rf $(pwd)/../logs/*
 
 ---
 
-### Phase 3: Exporting and Importing for Offline Machine
+## Phase 3: Exporting and Importing for Offline Machine
 After successful completion of above steps, it is now time to export your WSL 2 instance into a portable disk or drive and import it to your offline machine by following the below steps.
 
-#### Step 1: Exporting the WSL Instance
+### Step 1: Exporting the WSL Instance
 
 Shut down the WSL instance and export it from your Windows PowerShell:
 
@@ -481,7 +481,7 @@ wsl --export <DistroName> D:/wsl_backups/ubuntu_offline.tar
 ```
 Replace `<DistroName>` (usually `Ubuntu` or `Ubuntu-XX.XX`) with the actual name.
 
-#### Step 2: Importing the New Offline Machine
+### Step 2: Importing the New Offline Machine
 
 On the new machine, install WSL 2 and then import the distribution:
 
@@ -499,17 +499,17 @@ Start your imported Ubuntu instance:
 wsl -d epi2me
 ```
 
-#### Step 3: Transferring Future Workflow and Container Files
+### Step 3: Transferring Future Workflow and Container Files
 
 After importing the initial WSL 2 instance onto the offline machine, you can download other workflows and the necessary container images from the internet (as previously outlined) and transfer them to `$HOME/.nextflow/assets` and `$HOME/containers`, respectively. This approach eliminates the need to export and import the entire WSL instance each time you want to add a new workflow to your system and saves a lot of time for you.
 
 ---
 
-### Appendix 1: Enabling GPU Access (Optional)
+## Appendix 1: Enabling GPU Access (Optional)
 
 To take advantage of GPU acceleration within your WSL 2 environment, you may need to install the NVIDIA Container Toolkit. This is especially recommended if your workflows require GPU resources. Begin by following the official NVIDIA instructions to add the appropriate repository and install the toolkit, which includes `nvidia-container-cli`. Make sure to run these steps inside your WSL instance:
 
-#### Installing NVIDIA Container Toolkit (Optional)
+### Installing NVIDIA Container Toolkit (Optional)
 
 If you plan to use a GPU, install the toolkit (including `nvidia-container-cli`) inside the WSL instance:
 

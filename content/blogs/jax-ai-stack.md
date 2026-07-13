@@ -8,7 +8,7 @@ tags:
   - Deep Learning
 ---
 
-## **Background: The Evolution of JAX**
+## Background: The Evolution of JAX
 
 Born from years of scaling TensorFlow and engineered to meet the demands of modern, highly flexible AI research, JAX has become Google’s flagship platform for high-performance numerical computing. Today, JAX powers the vast majority of Google’s breakthrough research and generative AI initiatives, including AlphaFold, Gemini, and Gemma.
 
@@ -22,7 +22,7 @@ In this post, we will walk through an end-to-end training and checkpointing pipe
 
 ---
 
-## **End-to-End Implementation: Building an MLP Pipeline**
+## End-to-End Implementation: Building an MLP Pipeline
 
 In the following section, we will build a self-contained AI stack step-by-step:
 
@@ -31,7 +31,7 @@ In the following section, we will build a self-contained AI stack step-by-step:
 3. Train the model using an encapsulated JIT-compiled loop while tracking loss convergence.
 4. Export and restore the optimized state safely using Orbax.
 
-### **Environment Setup and Core Imports**
+### Environment Setup and Core Imports
 
 Before writing model logic, we pull in the foundational libraries of our ecosystem: JAX for array operations, Optax for optimization algorithms, Flax NNX for stateful neural network blocks, and Orbax for high-performance checkpointing.
 
@@ -55,7 +55,7 @@ import orbax.checkpoint as ocp
 
 ```
 
-### **Defining the Stateful Model Architecture**
+### Defining the Stateful Model Architecture
 
 In classic Flax (Linen), variables and parameters were kept completely separate from the architecture definition. In `Flax.nnx`, parameters live directly inside our custom objects (e.g., `self.dense_layer_1`). NNX uses dynamic proxy objects under the hood to automatically discover child modules and their respective weights.
 
@@ -76,7 +76,7 @@ class MySimpleMlp(nnx.Module):
 
 ```
 
-### **Functional Train Step and In-Place JIT Mutation**
+### Functional Train Step and In-Place JIT Mutation
 
 JAX demands functional purity, meaning side effects like in-place variable mutation are strictly forbidden inside a `@jax.jit` compiled function.
 
@@ -102,13 +102,13 @@ def train_step(model_arg: nnx.Module, optimizer_arg: nnx.Optimizer,
 
 ```
 
-### **Setting up a Dataset and DataLoader Pipeline**
+### Setting up a Dataset and DataLoader Pipeline
 
 To feed batches of data into our model seamlessly during training, we need a robust data pipeline. We have two primary paths to achieve this: leveraging the familiar PyTorch framework (restricted purely to the host CPU) or adopting Google's new JAX-native data loading engine, **Grain**.
 
 Here, we will break down both approaches and show how easily they integrate into our Flax NNX training loop.
 
-#### **Approach A: The PyTorch Host-Side Loader**
+#### Approach A: The PyTorch Host-Side Loader
 
 It is a common concern among developers that introducing PyTorch utilities into a JAX project might trigger hardware allocation conflicts or portability bugs. However, PyTorch’s data loading pipeline is completely decoupled from its GPU execution engine. When we configure a PyTorch `DataLoader`, it operates strictly on the host (CPU), utilizing standard Python multiprocessing to fetch, shuffle, and structure our samples. Because it leaves the data resident on the CPU without touching accelerator drivers, it is 100% compatible with the JAX ecosystem and will not interfere with JAX’s device management on GPUs or TPUs.
 
@@ -150,7 +150,7 @@ def create_pytorch_loader(num_examples: int, din: int, dout: int,
 
 ```
 
-#### **Approach B: Google Grain (The JAX-Native Alternative)**
+#### Approach B: Google Grain (The JAX-Native Alternative)
 
 If we want to maintain a pure, single-ecosystem software stack, Google’s Grain is the optimal choice. Grain is a modern open-source data loader engineered from the ground up specifically for JAX environments.
 
@@ -177,7 +177,7 @@ def create_grain_loader(num_examples: int, din: int, dout: int, batch_size: int 
 
 ```
 
-### **Setting up Data Batch Streams**
+### Setting up Data Batch Streams
 
 JAX handles randomness via explicit, deterministic pseudo-random number generator (PRNG) state keys rather than global hidden seeds. In this step, we safely split our source entropy into dedicated keys for network weight initialization, followed by setting up our uniform dataset boundaries.
 
@@ -202,7 +202,7 @@ grain_loader = create_grain_loader(num_examples=num_examples, din=din, dout=dout
 
 ```
 
-### **Executing the Optimization Loop**
+### Executing the Optimization Loop
 
 With our compiled training step set up, we define a training loop across an arbitrary number of epochs. Because `train_step` is optimized by XLA, subsequent iterations bypass Python overhead entirely, executing faster.
 
@@ -253,7 +253,7 @@ def train_loop(model: nnx.Module, optimizer: nnx.Optimizer,
 
 ```
 
-#### **Execution A: Training Loop with PyTorch Batch Loader**
+#### Execution A: Training Loop with PyTorch Batch Loader
 
 ```python
 # Instantiate the model architecture
@@ -270,7 +270,7 @@ loss_pytorch = train_loop(my_model, my_optimizer, pytorch_loader, num_epochs)
 
 ```
 
-#### **Execution B: Training Loop with Grain Batch Loader**
+#### Execution B: Training Loop with Grain Batch Loader
 
 ```python
 # Instantiate an identical fresh model architecture
@@ -286,7 +286,7 @@ loss_grain = train_loop(my_model, my_optimizer, grain_loader, num_epochs)
 
 ```
 
-#### **Visualizing Loss Convergence Over Epochs**
+#### Visualizing Loss Convergence Over Epochs
 
 ```python
 fig, ax = plt.subplots(figsize=(5, 4))
@@ -303,7 +303,7 @@ plt.show()
 <img src="/static/assets/simple-ai-stack-jax-loss.png" width=500px>
 
 
-#### **Visualizing Internals: Extracting Weights and Biases**
+#### Visualizing Internals: Extracting Weights and Biases
 
 Flax NNX variables implement slicing semantics to expose raw tracking data. The ellipsis syntax `[...]` is used to select all elements across all array dimensions without needing a deprecated `.value` property.
 
@@ -327,7 +327,7 @@ nnx.display(model_state.dense_layer_2)
 
 ---
 
-### **Initializing Production-Grade Checkpointing via Orbax**
+### Initializing Production-Grade Checkpointing via Orbax
 
 When saving model weights using `orbax.checkpoint`, we will encounter serialization failures if we pass a relative path (like `../model-checkpoints`). Orbax relies heavily on Google's TensorStore engine to coordinate asynchronous, multi-threaded array caching. TensorStore requires strict absolute paths (`Path.resolve()`) to ensure no file shards are misplaced during intensive write routines.
 
@@ -364,7 +364,7 @@ print(f"Model successfully checkpointed to absolute path: {checkpoint_dir}")
 
 ---
 
-### **Restoring Checkpoint State**
+### Restoring Checkpoint State
 
 To restore a checkpoint, we initialize a fresh instance of our model and Optax transform. The new model, `restored_model`, is instantiated with a completely different PRNG key to demonstrate that state overwrite works correctly. We then use `checkpoint_manager.restore()` with `ocp.args.StandardRestore()` to pull the bundled dictionaries back into host memory.
 
@@ -426,7 +426,7 @@ print("Optimizer state (sample mu) restore verified successfully.")
 
 ---
 
-### **Clean Up and Resource Teardown**
+### Clean Up and Resource Teardown
 
 Once training and validation are complete, it is best practice to properly close active file streams and manage our persistent storage. Leaving managers open can lock files, and discarding intermediate debugging shards keeps our storage volume clean.
 
@@ -445,7 +445,7 @@ if checkpoint_dir and checkpoint_dir.exists():
 
 ---
 
-## **Hardware Portability: Zero Code Adjustments from CPU to TPU**
+## Hardware Portability: Zero Code Adjustments from CPU to TPU
 
 One of the strengths of this specific JAX/Flax AI stack is its absolute hardware portability.
 
@@ -459,11 +459,11 @@ JAX/NNX Approach:   [Unified Arrays] -> Automatic JIT Virtual Device Allocation
 
 JAX handles this completely differently through its XLA compiler backend:
 
-### **Transparent Array Allocation**
+### Transparent Array Allocation
 
 JAX arrays (`jnp.ndarray`) are fundamentally device-agnostic abstractions. When we execute JAX code, the arrays are automatically placed on our system's primary default accelerator. If we have a discrete GPU available, JAX initializes our parameters directly inside GPU VRAM; if we are running on a Google Cloud TPU node, they are routed to TPU HBM memory.
 
-### **The Compiling Layer (`@nnx.jit`)**
+### The Compiling Layer (`@nnx.jit`)
 
 The `@nnx.jit` decorator acts as a high-performance wrapper around `jax.jit`. Rather than interpreting Python line-by-line, XLA acts as an optimizing compiler. It fuses consecutive mathematical steps (like our `Linear` layers and `relu` activation) into unified, hardware-optimized kernel operations tailored specifically for the target accelerator architecture.
 
@@ -471,7 +471,7 @@ Because XLA abstracts the underlying instruction set, the exact same machine lea
 
 ---
 
-## **References**
+## References
 
 1. [Mince F. et. al. The Grand Illusion: The Myth of Software Portability and Implications for ML Progress (2023)](https://arxiv.org/pdf/2309.07181)
 2. [JAX AI Stack](https://jaxstack.ai/)

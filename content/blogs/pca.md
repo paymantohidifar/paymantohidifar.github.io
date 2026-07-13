@@ -7,7 +7,7 @@ tags:
   - Unsupervised Machine Learning
   - RNA-seq
 ---
-## **Introduction**
+## Introduction
 
 When engineering high-throughput bioinformatics pipelines, we routinely encounter the curse of dimensionality ($p \gg n$), where $p$ represents experimental features and $n$ represents biological replicates or cell lines. A typical bulk RNA-seq experiment profiles the expression of $p \approx 20,000$ genes across a small cohort of $n \approx 20$ samples. Visualizing, parsing, or training machine learning models directly on this raw 20,000-dimensional space introduces a massive risk of overfitting, multicollinearity, and data leakage.
 
@@ -15,7 +15,7 @@ Principal Component Analysis (PCA) is our primary tool for unsupervised dimensio
 
 ---
 
-## **The Role of PCA in Bulk RNA-seq**
+## The Role of PCA in Bulk RNA-seq
 
 PCA acts as an essential quality control gatekeeper. By compressing the full transcriptome down to a few orthogonal axes—called **Principal Components (PCs)**—it maps sample relationships onto an interpretable 2D or 3D scatter plot. When evaluating a PCA projection, we look for two distinct signals:
 
@@ -24,7 +24,7 @@ PCA acts as an essential quality control gatekeeper. By compressing the full tra
 
 ---
 
-## **The Prerequisite: Why VST Matters**
+## The Prerequisite: Why VST Matters
 
 PCA is a *variance-maximizing* algorithm. In raw RNA-seq read counts, variance scales quadratically with mean expression due to the inherently overdispersed nature of transcriptomic count data:
 
@@ -42,11 +42,11 @@ This mathematical transformation stabilizes the variance across the entire dynam
 
 ---
 
-## **The Linear Algebra of PCA**
+## The Linear Algebra of PCA
 
 To compute PCA, we rotate our high-dimensional coordinate system to align the new axes with the maximum directions of data spread.
 
-### **Step A: Centering and Covariance**
+### Step A: Centering and Covariance
 
 Given a VST-transformed expression matrix $X \in \mathbb{R}^{n \times p}$ ($n$ samples, $p$ genes), we calculate the mean expression of each gene $\mu_j$ and center the data matrix:
 
@@ -56,7 +56,7 @@ We then derive the $p \times p$ **Covariance Matrix** ($\Sigma$), tracking how e
 
 $$\Sigma = \frac{1}{n-1}\tilde{X}^T \tilde{X}$$
 
-### **Step B: Eigen-decomposition**
+### Step B: Eigen-decomposition
 
 We solve for the eigenvalues ($\lambda$) and eigenvectors ($\nu$) of our sample covariance matrix:
 
@@ -65,7 +65,7 @@ $$\Sigma \nu_i = \lambda_i \nu_i$$
 * **Eigenvectors ($\nu$):** These define the directions of the new orthogonal axes (the Principal Components).
 * **Eigenvalues ($\lambda$):** These quantify the absolute variance captured along each component. We sort them in descending order ($\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_p$) to isolate the dominant signals.
 
-### **Step C (Production Scale): Singular Value Decomposition (SVD)**
+### Step C (Production Scale): Singular Value Decomposition (SVD)
 
 In real-world bioinformatics workflows, computing a $20,000 \times 20,000$ covariance matrix $\Sigma$ is highly inefficient. Instead, we compute **Singular Value Decomposition (SVD)** directly on our centered expression matrix $\tilde{X}$:
 
@@ -75,15 +75,15 @@ $$\tilde{X} = USV^T$$
 * $S$: A diagonal matrix containing singular values ($s_i$), directly related to our covariance eigenvalues by $\lambda_i = \frac{s_i^2}{n-1}$.
 * $U \in \mathbb{R}^{n \times n}$: Left-singular vectors, which map directly to our final sample coordinates.
 
-> **Note**: For foundational linear algebra references on SVD mechanics, watch [Gilbert Strang's lecture on MIT OpenCourseWare](https://www.youtube.com/watch?v=rYz83XPxiZo).
+> **Note:** For foundational linear algebra references on SVD mechanics, watch [Gilbert Strang's lecture on MIT OpenCourseWare](https://www.youtube.com/watch?v=rYz83XPxiZo).
 
 ---
 
-## **Implementation: Python vs. R**
+## Implementation: Python vs. R
 
 In production-grade engineering, it is standard practice to filter the input matrix to the top 500–1000 most variable genes. This mitigates transcriptional background noise and accelerates convergence. Below are fully unified, equivalent workflows in both languages. For more hands-on experience, check out my [notebook](https://github.com/paymantohidifar/bulk-rnaseq-analysis-workflows/blob/dev-python-wf/python-wf/bonus/notebooks/clustring.ipynb).
 
-#### **Python Implementation**
+#### Python Implementation
 
 ```python
 import numpy as np
@@ -133,7 +133,7 @@ plt.show()
 
 ```
 
-#### **R Implementation**
+#### R Implementation
 
 ```r
 library(DESeq2)
@@ -169,7 +169,7 @@ fviz_pca_biplot(pca_res,
 
 ---
 
-## **Projection and Dimensionality Reduction**
+## Projection and Dimensionality Reduction
 
 The physical projection step is modeled as a linear transformation via matrix multiplication. If $\tilde{X} \in \mathbb{R}^{n \times p}$ is our centered data matrix and $V_k \in \mathbb{R}^{p \times k}$ represents the matrix containing the first $k$ eigenvectors (loadings), our low-dimensional score coordinate matrix $Z \in \mathbb{R}^{n \times k}$ is computed as:
 
@@ -179,7 +179,7 @@ To generate a standard 2D PCA plot, we isolate the first two components ($k = 2$
 
 ---
 
-## **Summary of Core Performance Metrics**
+## Summary of Core Performance Metrics
 
 * **Proportion of Variance Explained (PVE):** Defined as $\frac{\lambda_k}{\sum_{i=1}^{p} \lambda_i}$. If $PC1$ captures a dominant proportion of the global variance (e.g., $>50\%$) and maps cleanly to our phenotypic classes, our experimental design yields a highly robust signal-to-noise ratio.
 * **Loadings Matrix ($V$):** Evaluating the magnitude and sign of values within $V$ isolates the explicit gene drivers separating our sample groups. Genes with high absolute weights along a separating PC coordinate represent direct candidates for downstream mechanistic validation.
