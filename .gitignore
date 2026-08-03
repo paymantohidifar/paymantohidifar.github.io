@@ -17,3 +17,5 @@ __pycache__/
 # local, non-shared Claude Code instructions
 CLAUDE.local.md
 
+# Misc
+**/blogs_in_prep/*
