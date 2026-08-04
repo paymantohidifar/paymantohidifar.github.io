@@ -352,8 +352,8 @@ a:hover {
 
 .project-header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-wrap: nowrap;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
 }
@@ -362,11 +362,15 @@ a:hover {
   margin: 0;
   font-size: 1.3rem;
   font-weight: 700;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .project-links {
   display: flex;
+  flex: 0 0 auto;
   gap: 0.9rem;
+  padding-top: 0.2rem;
 }
 
 .project-link {
@@ -383,15 +387,19 @@ a:hover {
 }
 
 .project-section {
+  margin-top: 1.5rem;
+}
+
+.project-section-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
   align-items: flex-start;
-  margin-top: 1.5rem;
 }
 
 .project-section-text {
   flex: 1 1 300px;
+  min-width: 0;
 }
 
 .project-section-text h3 {
@@ -399,8 +407,34 @@ a:hover {
   font-size: 1rem;
 }
 
+.project-section-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 400px;
+  min-width: 0;
+}
+
+.project-section-side .project-section-figure {
+  max-width: 576px;
+  width: 100%;
+}
+
+.project-section-below {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.project-section-below .project-section-figure {
+  flex: 1 1 320px;
+  max-width: 400px;
+}
+
 .project-section-figure {
-  flex: 0 1 320px;
+  flex: 1 1 240px;
   margin: 0;
   text-align: center;
 }

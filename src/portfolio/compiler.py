@@ -7,7 +7,7 @@ import shutil
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any, Dict, List, Match, Optional, Tuple
+from typing import Any, Dict, List, Match, Tuple
 
 import markdown
 import yaml
@@ -49,11 +49,16 @@ class BlogPost:
 
 @dataclass(frozen=True)
 class ProjectImage:
-    """An image embedded in a project section, with its display width and caption."""
+    """An image embedded in a project section, with its display width and caption.
+
+    `layout` controls placement within the section: "side" stacks the image
+    in a column next to the text, "below" places it in a row beneath the text.
+    """
 
     src: str
     caption: str
     width: int
+    layout: str = "below"
 
 
 @dataclass(frozen=True)
@@ -62,7 +67,7 @@ class ProjectSection:
 
     heading: str
     description: str
-    image: Optional[ProjectImage] = None
+    images: List[ProjectImage] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -192,9 +197,7 @@ def load_projects(content_dir: Path) -> List[Project]:
             ProjectSection(
                 heading=section["heading"],
                 description=section["description"],
-                image=(
-                    ProjectImage(**section["image"]) if section.get("image") else None
-                ),
+                images=[ProjectImage(**image) for image in section.get("images", [])],
             )
             for section in entry.get("sections", [])
         ]

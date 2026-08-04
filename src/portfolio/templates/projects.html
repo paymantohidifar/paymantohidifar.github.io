@@ -29,16 +29,36 @@
         {% endfor %}
       </ul>
       {% for section in project.sections %}
+      {% set side_images = section.images|selectattr("layout", "equalto", "side")|list %}
+      {% set below_images = section.images|rejectattr("layout", "equalto", "side")|list %}
       <div class="project-section">
-        <div class="project-section-text">
-          <h3>{{ section.heading }}</h3>
-          <p>{{ section.description }}</p>
+        <div class="project-section-row">
+          <div class="project-section-text">
+            {% if section.heading %}
+            <h3>{{ section.heading }}</h3>
+            {% endif %}
+            <p>{{ section.description }}</p>
+          </div>
+          {% if side_images %}
+          <div class="project-section-side">
+            {% for image in side_images %}
+            <figure class="project-section-figure">
+              <img src="{{ image.src }}" width="{{ image.width }}" alt="{{ image.caption }}">
+              <figcaption>{{ image.caption }}</figcaption>
+            </figure>
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
-        {% if section.image %}
-        <figure class="project-section-figure">
-          <img src="{{ section.image.src }}" width="{{ section.image.width }}" alt="{{ section.image.caption }}">
-          <figcaption>{{ section.image.caption }}</figcaption>
-        </figure>
+        {% if below_images %}
+        <div class="project-section-below">
+          {% for image in below_images %}
+          <figure class="project-section-figure">
+            <img src="{{ image.src }}" width="{{ image.width }}" alt="{{ image.caption }}">
+            <figcaption>{{ image.caption }}</figcaption>
+          </figure>
+          {% endfor %}
+        </div>
         {% endif %}
       </div>
       {% endfor %}

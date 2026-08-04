@@ -1,45 +1,51 @@
-- title: Replace Project One
+- title: ""
   tags:
-    - Synthetic Biology
-    - Python
+    - 
   links:
     - label: GitHub
       url: https://github.com/paymantohidifar
   sections:
-    - heading: Problem
-      description: >
-        Short description of the problem this project addresses and why it
-        matters.
-    - heading: Approach
+    - heading: ""
       description: >
         Short description of the methods and tools used to solve the
         problem (e.g. specific algorithms, libraries, or experimental
         techniques).
-      image:
-        src: /static/assets/training_loss.png
-        caption: "Test image — training loss curve"
-        width: 400
-    - heading: Outcome
-      description: >
-        Short description of the result and its impact.
+      images:
+        - src: ""
+          caption: ""
+          width: 400
 
-- title: Replace Project Two
+- title: A Modular Computational Framework for Multi-Scale Simulation of Chemotaxis in Complex Environments
   tags:
-    - Machine Learning
-    - Bioinformatics
+    - Signal Transduction
+    - Multi-Scale Simulation
+    - Finite Elements
   links:
-    - label: GitHub
-      url: https://github.com/paymantohidifar
+    - label: Conference Paper
+      url: https://aiche.confex.com/aiche/2015/webprogram/Paper433487.html
   sections:
-    - heading: Problem
+    - heading: ""
       description: >
-        Short description of the problem this project addresses and why it
-        matters.
-    - heading: Approach
-      description: >
-        Short description of the methods and tools used to solve the
-        problem (e.g. specific algorithms, libraries, or experimental
-        techniques).
-    - heading: Outcome
-      description: >
-        Short description of the result and its impact.
+        Chemotaxis has long served as a model system for signal transduction in both 
+        bacteria and eukaryotes. Existing chemotaxis models typically capture either 
+        intracellular signaling dynamics or population-level behavior of swimming/migrating 
+        cells in chemical gradients, rarely both. We built a modular, multi-scale computational 
+        framework that bridges the two using a hybrid-continuum, particle-in-cell approach: 
+        individual cells integrate their own intracellular pathway dynamics, their aggregate 
+        effects are interpolated onto a stationary mesh, macroscale chemical fields are updated, 
+        and the results are interpolated back to each cell. Validated against experimental 
+        bacterial chemotaxis data with quantitative agreement, the framework generalizes to 
+        any cell population interacting through chemical signaling.
+      images:
+        - src: /static/assets/particle_in_cell_algorithm.png
+          caption: "Hybrid-continuum Particle-in-Cell algorithm."
+          width: 576
+          layout: side
+        - src: /static/assets/cap_assay.gif
+          caption: "3D simulation of individual cells swimming along the chemoattractant gradient released from the capillary tube."
+          width: 360
+          layout: below
+        - src: /static/assets/aggregates.gif
+          caption: "2D simulation of cells forming aggregates in response to signaling chemical they release."
+          width: 280
+          layout: below
