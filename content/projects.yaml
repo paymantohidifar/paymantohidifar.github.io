@@ -1,19 +1,36 @@
-- title: ""
+- title: The Mechanism of Bidirectional pH Taxis in Bacillus subtilis
   tags:
-    - 
+    - Receptor Signaling
+    - Protein Engineering
+    - Bioinformatics
   links:
     - label: GitHub
-      url: https://github.com/paymantohidifar
+      url: https://github.com/paymantohidifar/pH-receptors
   sections:
     - heading: ""
       description: >
-        Short description of the methods and tools used to solve the
-        problem (e.g. specific algorithms, libraries, or experimental
-        techniques).
+        Bacillus subtilis senses pH gradients using four transmembrane chemoreceptors—McpA and
+        TlpA for acidic environments, McpB and TlpB for alkaline ones—to migrate
+        toward neutral conditions. Using sequence alignment and structural modeling,
+        we designed chimeras between McpA and TlpB, the principal acid- and
+        base-sensing receptors, to map the determinants of pH specificity down to
+        four residues. Engineering a swap of these residues was sufficient to invert
+        each receptor's response, converting the acid sensor into a base sensor and
+        vice versa. Using combined protein engineering and comprehsive bioinformatics 
+        analysis, we were able to proprose a model for sensing environmental pH in bacteria.
       images:
-        - src: ""
-          caption: ""
-          width: 400
+        - src: /static/assets/pH_receptor.png
+          caption: "Key residues involved in sensing environmental pH."
+          width: 150
+          layout: below
+        - src: /static/assets/pH_sensing_residues.png
+          caption: "Conservation of pH-sensing amino acid residues in dCACHE_1 domains across bacteria."
+          width: 230
+          layout: below
+        # - src: /static/assets/pH_sensing_residues.png
+        #   caption: "Conservation of pH-sensing amino acid residues in *dCACHE_1* domains across bacteria."
+        #   width: 230
+        #   layout: below
 
 - title: A Modular Computational Framework for Multi-Scale Simulation of Chemotaxis in Complex Environments
   tags:
