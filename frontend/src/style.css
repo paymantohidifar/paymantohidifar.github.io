@@ -430,7 +430,7 @@ a:hover {
 
 .project-section-below .project-section-figure {
   flex: 1 1 320px;
-  max-width: 400px;
+  max-width: 100%;
 }
 
 .project-section-figure {

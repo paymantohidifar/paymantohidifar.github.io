@@ -1,3 +1,36 @@
+- title: The Unconventional Cytoplasmic Sensing Mechanism for Ethanol Chemotaxis in Bacillus subtilis
+  tags:
+    - Unconventional Signaling
+    - Protein Engineering
+    - Molecular Dynamics Simulation
+    - In-vitro Structural Analysis
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/alcohol-receptors
+    - label: Paper
+      url: https://doi.org/10.1128/mbio.02177-20
+  sections:
+    - heading: ""
+      description: >
+        Most chemoreceptors sense molecules through an extracellular domain, but we
+        found that ethanol sensing in Bacillus subtilis relies on two unconventional
+        sensors. McpB, a transmembrane receptor, binds ethanol not at its
+        extracellular domain but within its cytoplasmic signaling domain; through
+        protein engineering, we identified a single residue, Ala431, whose mutation
+        to serine disrupts alcohol taxis, and molecular dynamics simulations showed
+        this substitution tightens coiled-coil packing in the signaling domain,
+        closing off the intermonomer pocket ethanol binds between the helices.
+        HemAT, the main oxygen receptor, instead senses ethanol through its myoglobin-like
+        domain, independent of its heme group. Since ethanol is neither metabolized
+        nor beneficial to B. subtilis, these mechanisms likely evolved to help the
+        cell locate alcohol-producing prey, and reveal that a chemoreceptor's sensory
+        repertoire can extend beyond its canonical sensing domain.
+      images:
+        - src: /static/assets/alcohol_sensing.png
+          caption: "(A) Chimeric and mutational analysis maps the McpB cytoplasmic residues that sense alcohols. (B) MD simulations of WT vs. A431S reveal reduced ethanol occupancy at the binding residues (red bars). (C) NMR and UV spectroscopy show ethanol binds directly within the HemAT sensing domain's helices."
+          width: 900
+          layout: below
+
 - title: The Mechanism of Bidirectional pH Taxis in Bacillus subtilis
   tags:
     - Receptor Signaling
@@ -6,6 +39,8 @@
   links:
     - label: GitHub
       url: https://github.com/paymantohidifar/pH-receptors
+    - label: Paper
+      url: https://doi.org/10.1128/jb.00491-19
   sections:
     - heading: ""
       description: >
@@ -27,10 +62,6 @@
           caption: "Conservation of pH-sensing amino acid residues in dCACHE_1 domains across bacteria."
           width: 230
           layout: below
-        # - src: /static/assets/pH_sensing_residues.png
-        #   caption: "Conservation of pH-sensing amino acid residues in *dCACHE_1* domains across bacteria."
-        #   width: 230
-        #   layout: below
 
 - title: A Modular Computational Framework for Multi-Scale Simulation of Chemotaxis in Complex Environments
   tags:
