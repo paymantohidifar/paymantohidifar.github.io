@@ -33,7 +33,7 @@
 
 - title: The Mechanism of Bidirectional pH Taxis in Bacillus subtilis
   tags:
-    - Receptor Signaling
+    - Unconventional Signaling
     - Protein Engineering
     - Bioinformatics
   links:
@@ -54,13 +54,9 @@
         vice versa. Using combined protein engineering and comprehsive bioinformatics 
         analysis, we were able to proprose a model for sensing environmental pH in bacteria.
       images:
-        - src: /static/assets/pH_receptor.png
-          caption: "Key residues involved in sensing environmental pH."
-          width: 150
-          layout: below
-        - src: /static/assets/pH_sensing_residues.png
-          caption: "Conservation of pH-sensing amino acid residues in dCACHE_1 domains across bacteria."
-          width: 230
+        - src: /static/assets/ph_sensing.png
+          caption: "(A) Key residues involved in sensing environmental pH. (B) Conservation of pH-sensing amino acid residues in dCACHE_1 domains across bacteria. (C) Model for pH sensing mechanism in B. subtilis."
+          width: 900
           layout: below
 
 - title: A Modular Computational Framework for Multi-Scale Simulation of Chemotaxis in Complex Environments
