@@ -350,9 +350,106 @@ a:hover {
   background: var(--bg-elevated);
 }
 
+.project-header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .project-card h2 {
-  margin-top: 0;
-  font-size: 1.1rem;
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.project-links {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.9rem;
+  padding-top: 0.2rem;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.project-link:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.project-section {
+  margin-top: 1.5rem;
+}
+
+.project-section-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.project-section-text {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.project-section-text h3 {
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+}
+
+.project-section-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1 1 400px;
+  min-width: 0;
+}
+
+.project-section-side .project-section-figure {
+  max-width: 576px;
+  width: 100%;
+}
+
+.project-section-below {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.project-section-below .project-section-figure {
+  width: 100%;
+  max-width: 100%;
+}
+
+.project-section-figure {
+  flex: 1 1 240px;
+  margin: 0;
+  text-align: center;
+}
+
+.project-section-figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.4rem;
+}
+
+.project-section-figure figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
 }
 
 .back-link {

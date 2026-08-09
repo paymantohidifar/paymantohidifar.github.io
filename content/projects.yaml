@@ -1,17 +1,233 @@
-- title: Replace Project One
-  description: >
-    Short one or two sentence description of this project, the problem it
-    solves, and the tools/methods used.
-  link: https://github.com/paymantohidifar
+- title: Developing Production ready GPT-2 Text Classifier From Scratch
   tags:
-    - Synthetic Biology
-    - Python
+    - GPT-2 Transformer
+    - Text Classification
+    - Deep Learning
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/gpt2-text-classifier-from-scratch.git
+  sections:
+    - heading: ""
+      description: >
+        A GPT-2 architecture built from scratch and fine-tuned for text classification,
+        inspired by Sebastian Raschka's Build a Large Language Model (From Scratch) book. The
+        platform is designed around a decoupled, configuration-driven data pipeline that
+        ingests any local or remote two-column dataset (text, label) without code
+        modification, letting students and practitioners iteratively build and test
+        different GPT-2 architectures. It also includes a complete suite of evaluation
+        metrics and optional Distributed Data Parallel (DDP) support for scaling training
+        seamlessly across multiple GPUs or nodes, and an optional flag for real-time model evaluation 
+        using WandB API.
+      images:
+        - src: /static/assets/model_metrics.png
+          caption: ""
+          width: 400
+          layout: side
 
-- title: Replace Project Two
-  description: >
-    Short one or two sentence description of this project, the problem it
-    solves, and the tools/methods used.
-  link: https://github.com/paymantohidifar
+- title: Deep Learning for Protein Function Prediction
   tags:
-    - Machine Learning
+    - Protein Function Prediction
+    - Multi-label Classification   
+    - ESM2
+    - Deep Learning
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/protein-function-deep-learning.git
+  sections:
+    - heading: ""
+      description: >
+        A neural network model that predicts protein function directly from amino acid
+        sequence, using the CAFA (Critical Assessment of Functional Annotation) dataset
+        for data preparation, training, and evaluation. Since individual proteins commonly
+        participate in multiple physiological roles concurrently, the task is framed as
+        multi-label classification, predicting functional associations for human proteins
+        across 291 distinct Gene Ontology Molecular Function categories. Fixed-size protein
+        embeddings are derived from a frozen, pretrained ESM-2 (150M parameter) backbone by
+        mean-pooling the sequence dimension across its final hidden layer, and a lightweight
+        two-hidden-layer Multi-Layer Perceptron (MLP) acts as a task-specific projection
+        head, learning to map ESM-2's latent evolutionary representations into multi-label
+        functional probability space without backpropagating into the language model. The platform 
+        is designed to be modular and extensible, allowing users to easily swap in different model 
+        architectures, loss functions, and evaluation metrics for experimentation.
+      images:
+        - src: /static/assets/model_prediction_high_level.png
+          caption: "High level visualization of model prediction performance across validation set."
+          width: 700
+          layout: below
+
+- title: "BioCanvas: A GUI for Multi-Modality Biological Experiment Data Analysis"
+  tags:
+    - Data Pipeline Automation
+    - GUI
+    - Statistical Analysis
+    - Data Visualization
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/BioCanvas.git
+  sections:
+    - heading: ""
+      description: >
+        A comprehensive GUI for processing, consolidating, analyzing, and visualizing
+        multi-modality biological experiment data, including fermentation, bioanalytical,
+        biochemistry, and mass spectrometry process results from selected projects. Its modular 
+        design allows users to easily add new data types and analysis workflows, and new projects
+        without modifying the core codebase. BioCanvas runs as an ipywidgets-based Jupyter notebook 
+        application, pulling raw experiment files from a local SQLite-backed store and turning them
+        into consolidated tables, statistics with hypothesis testing, and plots via built-in statistical
+        workflows, with no external services required. Synthetic data can also be generated for testing 
+        and demonstration purposes, and the entire platform is containerized for easy deployment and reproducibility.
+      images:
+        - src: /static/assets/data_flow_diagram.png
+          caption: "High level data pipeline and visualization workflow."
+          width: 900
+          layout: below
+
+- title: Lung Cancer Bulk RNA-Seq Data Analysis Pipeline
+  tags:
+    - Bulk RNA-Seq
+    - Unsupervised Learning
+    - Differential Expression Analysis
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/lung-cancer-bulk-rnaseq-analysis.git
+  sections:
+    - heading: ""
+      description: >
+        An end-to-end computational biology pipeline for analyzing bulk RNA-sequencing data
+        from the Cancer Cell Line Encyclopedia (CCLE), guiding users from raw count matrix
+        processing and unsupervised exploratory analysis (PCA, hierarchical clustering)
+        through differential expression modeling and downstream functional pathway
+        enrichment. The core logic is implemented in Python, with a supplementary R
+        workflow provided for cross-platform comparison.
+      images:
+        - src: /static/assets/Volcano_plot.png
+          caption: "Volcano plot of differentially expressed genes between lung cancer cell lines."
+          width: 500
+          layout: side
+
+- title: The Unconventional DNA Sensing in Bacteria
+  tags:
+    - Unconventional DNA Sensing
+    - Protein-DNA Interaction
+    - SELEX-Seq
+    - Motif Discovery
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/DNA-receptors.git
+  sections:
+    - heading: ""
+      description: >
+        We discovered that the bacterium Bacillus subtilis performs chemotaxis to DNA via one of
+        its principal chemoreceptors. While DNA can serve as a nutrient for B. subtilis,
+        our data suggested that this response is not to the DNA itself but to information encoded
+        within it: B. subtilis prefers the DNA of more closely related species over that of more
+        distantly related ones, suggesting the cells respond to particular sequences enriched in
+        the genomes of related bacteria. We used SELEX-seq to identify the specific DNA motifs
+        the DNA receptor responds to, then evaluated their binding properties using isothermal titration
+        calorimetry (ITC) and an in vitro receptor-kinase assay. The chemotaxis response is
+        dose-dependent, occurs to both chromosomal and synthetic DNA, albeit with high variance in 
+        the case of latter, and is strongest toward sequences enriched in these motifs, 
+        whose abundance across genomes partially explains the organismal preference for DNA chemotaxis.
+      images:
+        - src: /static/assets/dna_sensing.gif
+          caption: "(A) Model for DNA-sensing. (B) SELEX-seq enriched for receptor-binding DNA sequences. (C) Motif discovery analysis identified DNA motifs. (D) Animation of docked receptor sensing domain with its cognate DNA ligand. (E) Chemotaxis response to DNA correlates with motif abundance in tested bacterial genomes."
+          width: 600
+          layout: below
+
+- title: The Unconventional Cytoplasmic Sensing Mechanism for Ethanol Chemotaxis
+  tags:
+    - Unconventional Signaling
+    - Protein Engineering
+    - Molecular Dynamics Simulation
+    - In-vitro Structural Analysis
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/alcohol-receptors
+    - label: Paper
+      url: https://doi.org/10.1128/mbio.02177-20
+  sections:
+    - heading: ""
+      description: >
+        Most chemoreceptors sense molecules through an extracellular domain, but we
+        found that ethanol sensing in Bacillus subtilis relies on two unconventional
+        sensors. McpB, a transmembrane receptor, binds ethanol not at its
+        extracellular domain but within its cytoplasmic signaling domain; through
+        protein engineering and SDM, we identified a single residue, Ala431, whose mutation
+        to serine disrupts alcohol taxis, and molecular dynamics simulations showed
+        this substitution tightens coiled-coil packing in the signaling domain,
+        closing off the intermonomer pocket ethanol binds between the helices.
+        HemAT, the main oxygen receptor, instead senses ethanol through its myoglobin-like
+        domain, independent of its heme group. Since ethanol is neither metabolized
+        nor beneficial to B. subtilis, these mechanisms likely evolved to help the
+        cell locate alcohol-producing prey, and reveal that a chemoreceptor's sensory
+        repertoire can extend beyond its canonical sensing domain.
+      images:
+        - src: /static/assets/alcohol_sensing.png
+          caption: "Alcohols are directly sensed by the cytoplasmic signaling domain of McpB. (A) McpB cytoplasmic residues that interact with alcohols. (B) MD simulations of WT vs. A431S reveal reduced ethanol occupancy at the binding residues."
+          width: 900
+          layout: below
+        - src: /static/assets/alcohol_sensing_2.png
+          caption: "Ethanol directly binds within the helices of the HemAT sensing domain confirmed with NMR and UV spectroscopy."
+          width: 900
+          layout: below
+
+- title: The Mechanism of Bidirectional pH Taxis
+  tags:
+    - Unconventional Signaling
+    - Protein Engineering
     - Bioinformatics
+  links:
+    - label: GitHub
+      url: https://github.com/paymantohidifar/pH-receptors
+    - label: Paper
+      url: https://doi.org/10.1128/jb.00491-19
+  sections:
+    - heading: ""
+      description: >
+        Bacillus subtilis senses pH gradients using four transmembrane chemoreceptors—McpA and
+        TlpA for acidic environments, McpB and TlpB for alkaline ones—to migrate
+        toward neutral conditions. Using sequence alignment and structural modeling,
+        we designed chimeras between McpA and TlpB, the principal acid- and
+        base-sensing receptors, to map the determinants of pH specificity down to
+        four residues. Engineering a swap of these residues was sufficient to invert
+        each receptor's response, converting the acid sensor into a base sensor and
+        vice versa. Using combined protein engineering and comprehsive bioinformatics 
+        analysis, we were able to proprose a model for sensing environmental pH in bacteria.
+      images:
+        - src: /static/assets/ph_sensing.png
+          caption: "(A) Key residues involved in sensing environmental pH. (B) Conservation of pH-sensing amino acid residues in dCACHE_1 domains across bacteria. (C) Model for pH sensing mechanism in B. subtilis."
+          width: 900
+          layout: below
+
+- title: A Modular Computational Framework for Multi-Scale Simulation of Chemotaxis in Complex Environments
+  tags:
+    - Signal Transduction
+    - Multi-scale Simulation
+    - Finite Elements
+  links:
+    - label: Conference Paper
+      url: https://aiche.confex.com/aiche/2015/webprogram/Paper433487.html
+  sections:
+    - heading: ""
+      description: >
+        Chemotaxis has long served as a model system for signal transduction in both 
+        bacteria and eukaryotes. Existing chemotaxis models typically capture either 
+        intracellular signaling dynamics or population-level behavior of swimming/migrating 
+        cells in chemical gradients, rarely both. We built a modular, multi-scale computational 
+        framework that bridges the two using a hybrid-continuum, particle-in-cell approach: 
+        individual cells integrate their own intracellular pathway dynamics, their aggregate 
+        effects are interpolated onto a stationary mesh, macroscale chemical fields are updated, 
+        and the results are interpolated back to each cell. Spatio-temporal chemical field evolution
+        in 2D/3D space is solved using finite element method via the FEniCS C++ API, and intracellular 
+        signaling and cell motion dynamics are solved using a custom-built C++ library. Validated against 
+        experimental bacterial chemotaxis and pattern formation data with quantitative agreement, 
+        the framework can generalize to any cell population interacting through chemical signaling.
+      images:
+        - src: /static/assets/pic_pathway.png
+          caption: "(A) Hybrid-continuum Particle-in-Cell algorithm. (B) Schematic of E. coli's chemotaxis signal transduction pathway."
+          width: 900
+          layout: below
+        - src: /static/assets/simulations_hq.gif
+          caption: "Simulation results are in good agreement with experimental data: (A) 3D simulation of individual E. coli cells swimming up attractant gradient into the capillary tube. (B) Discrete aggregates formed by Salmonella enterica in liquid media. (C) Spiral patterns formed by Proteus mirabilis in soft-agar media."
+          width: 900
+          layout: below

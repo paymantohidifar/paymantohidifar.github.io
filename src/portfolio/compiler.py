@@ -47,6 +47,47 @@ class BlogPost:
         }
 
 
+@dataclass(frozen=True)
+class ProjectImage:
+    """An image embedded in a project section, with its display width and caption.
+
+    `layout` controls placement within the section: "side" stacks the image
+    in a column next to the text, "below" places it in a row beneath the text.
+    """
+
+    src: str
+    caption: str
+    width: int
+    layout: str = "below"
+
+
+@dataclass(frozen=True)
+class ProjectSection:
+    """A single labeled subsection within a project card (e.g. "Deep Learning")."""
+
+    heading: str
+    description: str
+    images: List[ProjectImage] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class ProjectLink:
+    """A named external link on a project card (GitHub repo, live demo, paper, etc.)."""
+
+    label: str
+    url: str
+
+
+@dataclass(frozen=True)
+class Project:
+    """A project card made up of a title, tags, links, and one or more sections."""
+
+    title: str
+    tags: List[str] = field(default_factory=list)
+    links: List[ProjectLink] = field(default_factory=list)
+    sections: List[ProjectSection] = field(default_factory=list)
+
+
 def parse_front_matter(raw_content: str) -> Tuple[Dict[str, Any], str]:
     """Splits a Markdown file with a YAML front-matter header into (metadata, body)."""
     if not raw_content.startswith("---"):
@@ -139,8 +180,37 @@ def load_about(content_dir: Path) -> Dict[str, Any]:
 
 
 def load_yaml(path: Path) -> Any:
-    """Loads a YAML content file (CV data, project list, etc.)."""
+    """Loads a YAML content file (CV data, etc.)."""
     return yaml.safe_load(path.read_text(encoding="utf-8"))
+
+
+def load_projects(content_dir: Path) -> List[Project]:
+    """Loads and validates the project list from content/projects.yaml."""
+    raw = (
+        yaml.safe_load((content_dir / "projects.yaml").read_text(encoding="utf-8"))
+        or []
+    )
+
+    projects: List[Project] = []
+    for entry in raw:
+        sections = [
+            ProjectSection(
+                heading=section["heading"],
+                description=section["description"],
+                images=[ProjectImage(**image) for image in section.get("images", [])],
+            )
+            for section in entry.get("sections", [])
+        ]
+        links = [ProjectLink(**link) for link in entry.get("links", [])]
+        projects.append(
+            Project(
+                title=entry["title"],
+                tags=entry.get("tags", []),
+                links=links,
+                sections=sections,
+            )
+        )
+    return projects
 
 
 class SiteBuilder:
@@ -163,7 +233,7 @@ class SiteBuilder:
 
         about = load_about(self.content_dir)
         cv = load_yaml(self.content_dir / "cv.yaml")
-        projects = load_yaml(self.content_dir / "projects.yaml")
+        projects = load_projects(self.content_dir)
         posts = load_blog_posts(self.content_dir)
 
         base_ctx = self._base_context(about)
