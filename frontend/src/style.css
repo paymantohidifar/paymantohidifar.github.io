@@ -422,14 +422,14 @@ a:hover {
 
 .project-section-below {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
 .project-section-below .project-section-figure {
-  flex: 1 1 320px;
+  width: 100%;
   max-width: 100%;
 }
 
