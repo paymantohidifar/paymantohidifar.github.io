@@ -336,6 +336,11 @@ a:hover {
   color: var(--text-muted);
 }
 
+.page-intro {
+  color: var(--text-muted);
+  margin: -0.5rem 0 1.5rem;
+}
+
 .project-grid {
   list-style: none;
   padding: 0;
