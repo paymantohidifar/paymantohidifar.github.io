@@ -36,19 +36,16 @@
   sections:
     - heading: ""
       description: >
-        A neural network model that predicts protein function directly from amino acid
-        sequence, using the CAFA (Critical Assessment of Functional Annotation) dataset
-        for data preparation, training, and evaluation. Since individual proteins commonly
+        A deep learning platform that predicts protein function directly from amino acid
+        sequence, using the CAFA (Critical Assessment of Functional Annotation) dataset for
+        data preparation, training, and evaluation. Since individual proteins commonly
         participate in multiple physiological roles concurrently, the task is framed as
         multi-label classification, predicting functional associations for human proteins
-        across 291 distinct Gene Ontology Molecular Function categories. Fixed-size protein
-        embeddings are derived from a frozen, pretrained ESM-2 (150M parameter) backbone by
-        mean-pooling the sequence dimension across its final hidden layer, and a lightweight
-        two-hidden-layer Multi-Layer Perceptron (MLP) acts as a task-specific projection
-        head, learning to map ESM-2's latent evolutionary representations into multi-label
-        functional probability space without backpropagating into the language model. The platform 
-        is designed to be modular and extensible, allowing users to easily swap in different model 
-        architectures, loss functions, and evaluation metrics for experimentation.
+        across 291 distinct Gene Ontology Molecular Function categories. The platform lets
+        users flexibly derive protein embeddings from pretrained ESM-2 transformers and feed these
+        rich sequence representations into a neural network classifier. It is designed to be
+        modular and extensible, allowing users to easily swap in different model architectures,
+        loss functions, and evaluation metrics for experimentation.
       images:
         - src: /static/assets/model_prediction_high_level.png
           caption: "High level visualization of model prediction performance across validation set."
@@ -150,19 +147,20 @@
   sections:
     - heading: ""
       description: >
-        Most chemoreceptors sense molecules through an extracellular domain, but we
-        found that ethanol sensing in Bacillus subtilis relies on two unconventional
-        sensors. McpB, a transmembrane receptor, binds ethanol not at its
-        extracellular domain but within its cytoplasmic signaling domain; through
-        protein engineering and SDM, we identified a single residue, Ala431, whose mutation
-        to serine disrupts alcohol taxis, and molecular dynamics simulations showed
-        this substitution tightens coiled-coil packing in the signaling domain,
-        closing off the intermonomer pocket ethanol binds between the helices.
-        HemAT, the main oxygen receptor, instead senses ethanol through its myoglobin-like
-        domain, independent of its heme group. Since ethanol is neither metabolized
-        nor beneficial to B. subtilis, these mechanisms likely evolved to help the
-        cell locate alcohol-producing prey, and reveal that a chemoreceptor's sensory
-        repertoire can extend beyond its canonical sensing domain.
+        This project also grew out of troubleshooting another project: following up on those
+        observations, we found that Bacillus subtilis chemotaxes toward alcohols. Most
+        chemoreceptors sense their ligand through an extracellular domain, but we found that
+        ethanol sensing in B. subtilis instead relies on two unconventional, cytoplasmic sensors.
+        McpB, a transmembrane receptor, binds ethanol not at its extracellular domain but within
+        its cytoplasmic signaling domain; through protein engineering and site-directed mutagenesis,
+        we identified a single residue, Ala431, whose mutation to serine disrupts alcohol taxis, and
+        molecular dynamics simulations showed that this substitution tightens coiled-coil packing in
+        the signaling domain, closing off the intermonomer pocket where ethanol binds between the
+        helices. HemAT, the main oxygen receptor, senses ethanol by an entirely different route,
+        through its myoglobin-like domain, independent of its heme group. Since ethanol is neither
+        metabolized nor beneficial to B. subtilis, these mechanisms likely evolved to help the cell
+        locate alcohol-producing prey, and together they reveal that a chemoreceptor's sensory
+        repertoire can extend well beyond its canonical sensing domain.
       images:
         - src: /static/assets/alcohol_sensing.png
           caption: "Alcohols are directly sensed by the cytoplasmic signaling domain of McpB. (A) McpB cytoplasmic residues that interact with alcohols. (B) MD simulations of WT vs. A431S reveal reduced ethanol occupancy at the binding residues."
@@ -173,28 +171,33 @@
           width: 900
           layout: below
 
-- title: The Mechanism of Bidirectional pH Taxis
+- title: The Mechanism of Bidirectional pH Sensing in Bacteria
   tags:
     - Unconventional Signaling
     - Protein Engineering
     - Bioinformatics
   links:
-    - label: GitHub
-      url: https://github.com/paymantohidifar/pH-receptors
     - label: Paper
       url: https://doi.org/10.1128/jb.00491-19
+    - label: Commentary
+      url: https://journals.asm.org/doi/full/10.1128/jb.00701-19
+    - label: GitHub
+      url: https://github.com/paymantohidifar/pH-receptors
+    
   sections:
     - heading: ""
       description: >
-        Bacillus subtilis senses pH gradients using four transmembrane chemoreceptors—McpA and
-        TlpA for acidic environments, McpB and TlpB for alkaline ones—to migrate
-        toward neutral conditions. Using sequence alignment and structural modeling,
-        we designed chimeras between McpA and TlpB, the principal acid- and
-        base-sensing receptors, to map the determinants of pH specificity down to
-        four residues. Engineering a swap of these residues was sufficient to invert
-        each receptor's response, converting the acid sensor into a base sensor and
-        vice versa. Using combined protein engineering and comprehsive bioinformatics 
-        analysis, we were able to proprose a model for sensing environmental pH in bacteria.
+        This project began as a side observation while I was troubleshooting a separate project on
+        DNA sensing in Bacillus subtilis during my PhD. Following up on that lead, we found that
+        cells repond to bidirectional pH gradients, and traced the response to four transmembrane
+        chemoreceptors: McpA and TlpA drive migration away from acidic environments, while McpB
+        and TlpB do the same for alkaline ones, together steering cells toward neutral pH. Using
+        structural modeling and protein engineering, we built chimeras between McpA and TlpB, the
+        principal acid- and base-sensing receptors, to map the determinants of pH specificity down
+        to four residues, and found that swapping just these residues was enough to invert each
+        receptor's response, turning the acid sensor into a base sensor and vice versa. Combining
+        this protein engineering with comprehensive bioinformatics analysis across bacterial
+        genomes, we proposed a general model for how bacteria sense environmental pH.
       images:
         - src: /static/assets/ph_sensing.png
           caption: "(A) Key residues involved in sensing environmental pH. (B) Conservation of pH-sensing amino acid residues in dCACHE_1 domains across bacteria. (C) Model for pH sensing mechanism in B. subtilis."
