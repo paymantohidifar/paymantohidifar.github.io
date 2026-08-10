@@ -123,11 +123,13 @@
         within it: B. subtilis prefers the DNA of more closely related species over that of more
         distantly related ones, suggesting the cells respond to particular sequences enriched in
         the genomes of related bacteria. We used SELEX-seq to identify the specific DNA motifs
-        the DNA receptor responds to, then evaluated their binding properties using isothermal titration
+        the receptor binds to, then evaluated their binding properties using isothermal titration
         calorimetry (ITC) and an in vitro receptor-kinase assay. The chemotaxis response is
-        dose-dependent, occurs to both chromosomal and synthetic DNA, albeit with high variance in 
-        the case of latter, and is strongest toward sequences enriched in these motifs, 
-        whose abundance across genomes partially explains the organismal preference for DNA chemotaxis.
+        dose-dependent and occurs toward both chromosomal and synthetic DNA, though with higher
+        variance in the latter case, which is the main reason this work remains unpublished and its
+        biological explanation is still under investigation. Chemotaxis is strongest toward sequences 
+        enriched in these motifs, whose abundance across genomes partially explains the organismal 
+        preference for DNA chemotaxis.
       images:
         - src: /static/assets/dna_sensing.gif
           caption: "(A) Model for DNA-sensing. (B) SELEX-seq enriched for receptor-binding DNA sequences. (C) Motif discovery analysis identified DNA motifs. (D) Animation of docked receptor sensing domain with its cognate DNA ligand. (E) Chemotaxis response to DNA correlates with motif abundance in tested bacterial genomes."
