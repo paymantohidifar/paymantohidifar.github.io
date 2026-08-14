@@ -7,17 +7,10 @@
     <a class="button" href="{{ cv.resume_pdf }}" download>Download PDF</a>
   </div>
 
-  <h2>Education</h2>
-  <ul class="cv-list">
-    {% for item in cv.education %}
-    <li>
-      <div class="cv-item-header">
-        <strong>{{ item.institution }}</strong>
-        <span class="period">{{ item.period }}</span>
-      </div>
-      <p>{{ item.degree }}</p>
-      <p class="details">{{ item.details }}</p>
-    </li>
+  <h2>Skills</h2>
+  <ul class="tag-list">
+    {% for skill in cv.skills %}
+    <li>{{ skill }}</li>
     {% endfor %}
   </ul>
 
@@ -30,20 +23,36 @@
         <span class="period">{{ item.period }}</span>
       </div>
       <p>{{ item.role }}</p>
-      <p class="details">{{ item.details }}</p>
+      <ul class="details-list">
+        {% for point in item.details %}
+        <li>{{ point }}</li>
+        {% endfor %}
+      </ul>
     </li>
     {% endfor %}
   </ul>
 
-  <h2>Skills</h2>
-  <ul class="tag-list">
-    {% for skill in cv.skills %}
-    <li>{{ skill }}</li>
+  {% if cv.projects %}
+  <h2>Voluntary Projects</h2>
+  <ul class="cv-list">
+    {% for item in cv.projects %}
+    <li>
+      <div class="cv-item-header">
+        <strong>{% if item.link %}<a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}</strong>
+        <span class="period">{{ item.period }}</span>
+      </div>
+      <ul class="details-list">
+        {% for point in item.details %}
+        <li>{{ point }}</li>
+        {% endfor %}
+      </ul>
+    </li>
     {% endfor %}
   </ul>
+  {% endif %}
 
   <h2>Publications</h2>
-  <ul class="cv-list">
+  <ul class="cv-list bulleted">
     {% for pub in cv.publications %}
     <li>
       <a href="{{ pub.link }}" target="_blank" rel="noopener noreferrer">{{ pub.title }}</a>
@@ -51,5 +60,73 @@
     </li>
     {% endfor %}
   </ul>
+
+  {% if cv.patents %}
+  <h2>Patents</h2>
+  <ul class="cv-list bulleted">
+    {% for item in cv.patents %}
+    <li>
+      <strong>{{ item.title }}</strong>
+      <p class="details">{{ item.details }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h2>Education</h2>
+  <ul class="cv-list">
+    {% for item in cv.education %}
+    <li>
+      <div class="cv-item-header">
+        <strong>{{ item.institution }}</strong>
+        <span class="period">{{ item.period }}</span>
+      </div>
+      <p>{{ item.degree }}</p>
+      <ul class="details-list">
+        {% for point in item.details %}
+        <li>{{ point }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+
+  {% if cv.certifications %}
+  <h2>Coursework &amp; Certifications</h2>
+  <ul class="cv-list bulleted">
+    {% for item in cv.certifications %}
+    <li>
+      {% if item.link %}<a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if cv.talks %}
+  <h2>Selected Conference Talks</h2>
+  <ul class="cv-list bulleted">
+    {% for item in cv.talks %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if cv.honors %}
+  <h2>Honors &amp; Awards</h2>
+  <ul class="cv-list bulleted">
+    {% for item in cv.honors %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if cv.service %}
+  <h2>Professional Service</h2>
+  <ul class="cv-list bulleted">
+    {% for item in cv.service %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 </section>
 {% endblock %}

@@ -298,8 +298,26 @@ a:hover {
 
 .cv-list li,
 .blog-list li {
-  padding: 1rem 0;
+  padding: 0.6rem 0;
   border-bottom: 1px solid var(--border);
+}
+
+.cv-list.bulleted {
+  list-style-type: circle;
+  padding-left: 1.1rem;
+}
+
+.cv-list.bulleted li {
+  padding: 0.15rem 0;
+  border-bottom: none;
+}
+
+[data-page="cv"] h2 {
+  margin: 1.5rem 0 0.5rem;
+}
+
+[data-page="cv"] p {
+  margin: 0.15rem 0;
 }
 
 .cv-item-header {
@@ -317,6 +335,18 @@ a:hover {
 .details {
   color: var(--text-muted);
   margin: 0.25rem 0 0;
+}
+
+.details-list {
+  color: var(--text-muted);
+  list-style-type: circle;
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.details-list li {
+  padding: 0.15rem 0;
+  border: none;
 }
 
 .tag-list {
