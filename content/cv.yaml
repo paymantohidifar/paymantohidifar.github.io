@@ -2,27 +2,155 @@ name: Payman Tohidifar
 tagline: Computational & Synthetic Biologist, AIxBio Enthusiast
 resume_pdf: /static/assets/resume.pdf
 
-education:
-  - institution: Replace With University
-    degree: Ph.D. in Synthetic Biology
-    period: "2019 - 2024"
-    details: Replace with dissertation focus and notable coursework.
+skills:
+  - Python
+  - R
+  - Bash / C++
+  - PyTorch
+  - JAX/Flax
+  - TensorFlow/Keras
+  - NumPy, SciPy, Pandas, Scikit-learn
+  - HPC/Slurm
+  - Claude Code
+  - Pixi/Conda, Docker, Git, CI/CD
+  - Bioinformatics (DESeq2, HMMER, BLAST, Nextflow, IGV, MEME Suite)
+  - Protein Engineering & Expression
+  - CRISPR Editing
+  - ONT Sequencing
+  - Flow Cytometry
+  - Genetic Assembly
 
 experience:
-  - organization: Replace With Lab or Company
-    role: Postdoctoral Researcher / Scientist
-    period: "2024 - Present"
-    details: Replace with a short description of responsibilities and impact.
+  - organization: BP (Biosciences, Technology and Innovation)
+    role: Scientist
+    period: "Feb 2022 - Present"
+    details:
+      - Engineered and deployed an end-to-end, ML-assisted low-N protein engineering pipeline — combining unsupervised (VAE, transformer) feature extraction with supervised fitness models — to improve industrial enzyme activity and thermostability.
+      - Built statistical and ML pipelines to analyze complex, multi-dimensional biorefinery data, directly informing key business decisions.
+      - Built a full-stack GUI for ingestion, consolidation, statistical analytics, and visualization of multi-modal biological data across projects; selected as a top-3 platform for executive leadership review.
+      - Co-developed a semi-automated HTP directed-evolution and protein-expression pipeline that cut turnaround time from 6 weeks to 2 weeks, accelerating the DBTL cycle.
+      - Developed an HTP platform (a novel FACS + 2A-peptide co-translation method) to boost protein production in an industrial fungal host, identifying multiple enzyme hyperproducers for scaled testing and cutting discovery time from 1+ year to 3 months.
+      - Standardized in-house Oxford Nanopore long-read sequencing and de novo genome assembly SOPs (EPI2ME, Nextflow).
+      - Led a 7-person cross-functional project on biosynthesis of value-added small molecules, resulting in publication of 6+ patent applications within 3 years.
+      - Built a CRISPR-MAD7 platform for single-nucleotide-resolution genetic engineering, enabling construction of 50+ bacterial cell lines and replacing a technology costing over $10K/yr.
+  - organization: Institute for Genomic Biology, UIUC
+    role: Postdoctoral Research Associate
+    period: "Aug 2019 - Feb 2022"
+    details:
+      - Co-developed a modular genetic toolkit for multi-gene expression and CRISPR-Cas9 chromosomal editing in two non-model oleaginous yeasts, enabling biosynthesis of value-added small molecules (2 publications, 1 conference paper).
+  - organization: Department of Chemical & Biomolecular Engineering, UIUC
+    role: Graduate Research Assistant
+    period: "Jan 2012 - May 2019"
+    details:
+      - Co-developed a modular C++ framework for multiscale simulation of cellular population behavior in response to complex spatiotemporal chemical gradients.
+      - Led three independent projects elucidating molecular mechanisms of unconventional chemoreceptor sensing in bacteria — bidirectional pH, alcohol, and toxic aromatic molecule sensing — spanning protein engineering, genetic engineering, bioinformatics, structural biology, and MD simulations; resulted in 3 journal publications and multiple conference presentations.
+      - Led discovery and characterization of an unconventional DNA-sensing receptor in B. subtilis using in vivo/in vitro assays and in silico motif-discovery analysis; presented at multiple conferences and awarded Best Presentation.
 
-skills:
-  - Synthetic Biology
-  - Computational Modeling
-  - Machine Learning for Biology
-  - Python
-  - Molecular Cloning
+projects:
+  - title: Deep Learning for Protein Function Prediction
+    period: "June 2026 - July 2026"
+    link: https://github.com/paymantohidifar/protein-function-deep-learning.git
+    details:
+      - Built a modular deep learning platform (PyTorch, JAX/Flax) on the CAFA benchmark to predict multi-label protein function across 291 Gene Ontology terms from sequence alone, integrating ESM-2 transformer embeddings into an extensible framework for rapid experimentation with custom architectures, loss functions, and metrics.
+  - title: Production Ready GPT-2 Text Classifier From Scratch
+    period: "April 2026 - May 2026"
+    link: https://github.com/paymantohidifar/gpt2-text-classifier-from-scratch.git
+    details:
+      - Built a GPT-2 architecture from scratch in PyTorch for text classification, with a configuration-driven pipeline that ingests multi-source, two-column datasets with zero code changes.
+      - Scaled training across multiple GPUs via Distributed Data Parallel (DDP) with real-time tracking in Weights & Biases (WandB), and built an end-to-end evaluation suite for benchmarking and iterative experimentation.
+  - title: Lung Cancer Bulk RNA-Seq Data Analysis Pipeline
+    period: "Feb 2026 - April 2026"
+    link: https://github.com/paymantohidifar/lung-cancer-bulk-rnaseq-analysis.git
+    details:
+      - Built an end-to-end Python/R pipeline for CCLE bulk RNA-seq data — count processing, PCA, hierarchical clustering, differential expression, and pathway enrichment.
 
 publications:
-  - title: Replace with publication title
-    venue: Replace with journal/conference
-    year: 2024
-    link: https://scholar.google.com/citations?user=REPLACE_ME
+  - title: "RT-EZ: A Golden Gate Assembly Toolkit for Streamlined Genetic Engineering of Rhodotorula toruloides"
+    venue: ACS Synthetic Biology
+    year: 2025
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+  - title: N-Acetyl Cysteine Exhibits Antimicrobial and Anti-Virulence Activity Against Salmonella enterica
+    venue: PLoS One
+    year: 2025
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+  - title: Engineering and Evolution of Yarrowia lipolytica for Producing Lipids from Lignocellulosic Hydrolysates
+    venue: Bioresource Technology
+    year: 2025
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+  - title: Characterization of Opposing Responses to Phenol by Bacillus subtilis Chemoreceptors
+    venue: Journal of Bacteriology
+    year: 2022
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+  - title: Fundamentals of Polymer Biodegradation Mechanisms (Book Chapter)
+    venue: Wiley
+    year: 2022
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+  - title: The Unconventional Cytoplasmic Sensing Mechanism for Ethanol Chemotaxis in Bacillus subtilis
+    venue: mBio
+    year: 2020
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+  - title: The Mechanism of Bidirectional pH Taxis in Bacillus subtilis
+    venue: Journal of Bacteriology
+    year: 2020
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+  - title: Three Adaptation Systems of B. subtilis Chemotaxis
+    venue: Molecular Microbiology
+    year: 2014
+    link: https://scholar.google.com/citations?user=6vvVONIAAAAJ&hl=en
+
+patents:
+  - title: Recombinant microorganisms for beta-myrecene and nerol production
+    details: "Valle, F., Vu, HNN., Tohidifar, P. Patent Application Pub. No. WO/2026/122843 A1, published June 11, 2026."
+  - title: Engineered dxp pathway for improved isoprenoid production in E. coli
+    details: "Valle, F., Tohidifar, P., Najdi, T., Vu, HNN. Patent Application Pub. No. WO/2025/155822 A1, published July 24, 2025."
+  - title: Recombinant microorganisms with increased accumulation and/or flux of cytidine triphosphate (CTP)
+    details: "Valle, F., Tohidifar, P., Najdi, T. Patent Application Pub. No. WO/2025/111429 A1, published May 30, 2025."
+  - title: Gluconate-regulated expression systems
+    details: "Valle, F., Tohidifar, P. Patent Application Pub. No. WO/2025/059030 A1, published March 20, 2025."
+  - title: Two additional provisional applications
+    details: "Co-invented with colleagues, covering novel enzymes and metabolic pathways for the biosynthesis of value-added small molecules (filed Feb 2 and Feb 19, 2026)."
+
+education:
+  - institution: University of Illinois at Urbana-Champaign (UIUC)
+    degree: Ph.D. in Chemical & Biomolecular Engineering
+    period: "2012 - 2019"
+    details:
+      - Computational Science & Engineering Certificate, 2019.
+      - "Dissertation: Non-canonical sensing mechanisms in bacteria."
+  - institution: Sharif University of Technology
+    degree: B.S. in Chemical Engineering
+    period: "2007 - 2011"
+    details:
+      - Graduated with honors, ranked 2nd of 120 in the Department of Chemical Engineering.
+
+certifications:
+  - title: "Deep Learning for Biology, C. Ravarani and N. Latysheva (O'Reilly Media, 2025) — in progress"
+    link: https://github.com/paymantohidifar/deep-learning-for-biology-book.git
+  - title: "Claude Code: A Highly Agentic Coding Assistant, DeepLearning.AI (2026)"
+    link: ""
+  - title: Deep Learning Specialization, Coursera (2026)
+    link: https://github.com/paymantohidifar/deep-learning-specialization-coursera.git
+  - title: "Build a Large Language Model (From Scratch), S. Raschka (Manning Publications, 2024) — completed 2026"
+    link: https://github.com/paymantohidifar/build-a-llm-from-scratch-book
+  - title: Machine Learning Specialization, Coursera (2025)
+    link: https://github.com/paymantohidifar/ml-specialization-coursera.git
+  - title: Mathematics for Machine Learning and Data Science Specialization, Coursera (2025)
+    link: ""
+  - title: bp Data Science Intermediate Bootcamp, Pragmatic Institute (2024)
+    link: ""
+  - title: ChIP-Seq Analysis Hands-On Training, High-Performance Biological Computing, UIUC (2017)
+    link: ""
+
+talks:
+  - "Tohidifar, P., Kimura, Y., Rao, CV. (2015) A modular computational framework for multi-scale simulation of chemotaxis in complex environments. AIChE, Salt Lake City, UT."
+  - "Tohidifar, P., Walukiewicz, HE., Ordal, GW., Rao, CV. (2016) DNA taxis in Bacillus subtilis. Receptor Fest 19th Annual Meeting, Santa Barbara, CA."
+  - "Tohidifar, P., Walukiewicz, HE., Ordal, GW., Rao, CV. (2017) DNA sensing in Bacillus subtilis. BLAST XIV, New Orleans, LA."
+
+honors:
+  - Nucleic Acids Research Award for an Outstanding Poster/Oral Presentation by a Young Investigator, BLAST XIV, New Orleans, LA, 2017.
+  - Graduate College Conference Travel Award, UIUC, 2016.
+  - Graduated with honors (ranked 2nd/120), Department of Chemical Engineering, Sharif University of Technology, Iran, 2011.
+  - Singapore International Pre-Graduate Award, ICES, A*STAR, Singapore, 2010.
+
+service:
+  - Reviewer for PLoS Computational Biology and PLoS One, 2018 – present.
