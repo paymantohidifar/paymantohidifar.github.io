@@ -52,7 +52,7 @@
   {% endif %}
 
   <h2>Publications</h2>
-  <ul class="cv-list">
+  <ul class="cv-list bulleted">
     {% for pub in cv.publications %}
     <li>
       <a href="{{ pub.link }}" target="_blank" rel="noopener noreferrer">{{ pub.title }}</a>
@@ -63,7 +63,7 @@
 
   {% if cv.patents %}
   <h2>Patents</h2>
-  <ul class="cv-list">
+  <ul class="cv-list bulleted">
     {% for item in cv.patents %}
     <li>
       <strong>{{ item.title }}</strong>
@@ -93,7 +93,7 @@
 
   {% if cv.certifications %}
   <h2>Coursework &amp; Certifications</h2>
-  <ul class="cv-list">
+  <ul class="cv-list bulleted">
     {% for item in cv.certifications %}
     <li>
       {% if item.link %}<a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
@@ -104,7 +104,7 @@
 
   {% if cv.talks %}
   <h2>Selected Conference Talks</h2>
-  <ul class="cv-list">
+  <ul class="cv-list bulleted">
     {% for item in cv.talks %}
     <li>{{ item }}</li>
     {% endfor %}
@@ -113,7 +113,7 @@
 
   {% if cv.honors %}
   <h2>Honors &amp; Awards</h2>
-  <ul class="cv-list">
+  <ul class="cv-list bulleted">
     {% for item in cv.honors %}
     <li>{{ item }}</li>
     {% endfor %}
@@ -122,7 +122,7 @@
 
   {% if cv.service %}
   <h2>Professional Service</h2>
-  <ul class="cv-list">
+  <ul class="cv-list bulleted">
     {% for item in cv.service %}
     <li>{{ item }}</li>
     {% endfor %}
