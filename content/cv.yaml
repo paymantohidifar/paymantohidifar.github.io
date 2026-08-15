@@ -25,8 +25,8 @@ experience:
     role: Scientist
     period: "Feb 2022 - Present"
     details:
-      - Engineered and deployed an end-to-end, ML-assisted low-N protein engineering pipeline — combining unsupervised (VAE, transformer) feature extraction with supervised fitness models — to improve industrial enzyme activity and thermostability.
-      - Built statistical and ML pipelines to analyze complex, multi-dimensional biorefinery data, directly informing key business decisions.
+      - Engineered and deployed an end-to-end, ML-assisted low-N protein engineering pipeline, combining unsupervised (VAE, transformer) feature extraction with supervised fitness models, to improve industrial enzyme activity and thermostability.
+      - Built statistical and conventional ML pipelines to analyze complex, multi-dimensional biorefinery data, directly informing key business decisions.
       - Built a full-stack GUI for ingestion, consolidation, statistical analytics, and visualization of multi-modal biological data across projects; selected as a top-3 platform for executive leadership review.
       - Co-developed a semi-automated HTP directed-evolution and protein-expression pipeline that cut turnaround time from 6 weeks to 2 weeks, accelerating the DBTL cycle.
       - Developed an HTP platform (a novel FACS + 2A-peptide co-translation method) to boost protein production in an industrial fungal host, identifying multiple enzyme hyperproducers for scaled testing and cutting discovery time from 1+ year to 3 months.
@@ -43,7 +43,7 @@ experience:
     period: "Jan 2012 - May 2019"
     details:
       - Co-developed a modular C++ framework for multiscale simulation of cellular population behavior in response to complex spatiotemporal chemical gradients.
-      - Led three independent projects elucidating molecular mechanisms of unconventional chemoreceptor sensing in bacteria — bidirectional pH, alcohol, and toxic aromatic molecule sensing — spanning protein engineering, genetic engineering, bioinformatics, structural biology, and MD simulations; resulted in 3 journal publications and multiple conference presentations.
+      - Led three independent projects elucidating molecular mechanisms of unconventional chemoreceptor sensing in bacteria, bidirectional pH, alcohol, and toxic aromatic molecule sensing, spanning protein engineering, genetic engineering, bioinformatics, structural biology, and MD simulations; resulted in 3 journal publications and multiple conference presentations.
       - Led discovery and characterization of an unconventional DNA-sensing receptor in B. subtilis using in vivo/in vitro assays and in silico motif-discovery analysis; presented at multiple conferences and awarded Best Presentation.
 
 projects:
@@ -137,6 +137,8 @@ certifications:
   - title: Mathematics for Machine Learning and Data Science Specialization, Coursera (2025)
     link: ""
   - title: bp Data Science Intermediate Bootcamp, Pragmatic Institute (2024)
+    link: ""
+  - title: Computational Science & Engineering Certificate, UIUC (2019) — Numerical Analysis (CS450), Numerical Methods for PDEs (CS555), Introduction to Optimization (CSE441), Nonlinear Dynamics (PHYS510)
     link: ""
   - title: ChIP-Seq Analysis Hands-On Training, High-Performance Biological Computing, UIUC (2017)
     link: ""
