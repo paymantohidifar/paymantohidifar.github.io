@@ -18,4 +18,5 @@ In my postdoctoral work, I moved from asking fundamental questions to applying t
 That pursuit began 3+ years ago with the fundamentals of machine learning and has since grown into hands-on work with modern deep learning architectures, from CNNs and RNNs to transformers and biological foundation models, applied to problems like protein function prediction, protein engineering, and gene regulation. While we're still at the beginning of the journey, it's been heartwarming to watch tech, biotech, and biopharma begin to converge around these tools to tackle some of the most challenging problems in biology, both fundamental questions and applied ones that directly impact human health, the environment, and, hopefully soon, energy. I'm now focused on applying this expanding AI/ML toolkit, and on contributing to more powerful tools that make biological discovery faster, more predictable, and more automated.
 
 This site collects some of my projects with computational components, CV, and occasional writing on computational
-biology, synthetic biology, and AI.
+biology, synthetic biology, and AI. As a supporter of open-source science, I look forward to potential collaborations
+in the AI/biology space with fellow scientists and engineers, so feel free to reach out!
