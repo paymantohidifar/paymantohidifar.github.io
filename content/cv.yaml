@@ -5,7 +5,8 @@ resume_pdf: /static/assets/resume.pdf
 skills:
   - Python
   - R
-  - Bash / C++
+  - Bash/Linux
+  - C++
   - PyTorch
   - JAX/Flax
   - TensorFlow/Keras
