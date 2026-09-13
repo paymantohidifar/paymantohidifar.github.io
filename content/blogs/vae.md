@@ -3,7 +3,7 @@ title: "Variational Autoencoders: Intuition and the Math Behind the Loss"
 date: August 2026
 description: A ground-up derivation of the VAE loss function, from Bayesian inference and the ELBO to the reparameterization trick and the reconstruction loss for both binary and continuous data.
 tags:
-  - Machine Learning
+  - Bayesian Statistics
   - Generative Models
   - Deep Learning
 ---
