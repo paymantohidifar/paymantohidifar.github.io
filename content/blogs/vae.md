@@ -11,7 +11,7 @@ tags:
 My introduction to Variational Autoencoders (VAEs) didn't come from generating synthetic images, but from studying generative models that map protein sequences to functional fitness landscapes to predict mutational effects. VAEs evolved out of the conventional autoencoders that have been around for decades and were first introduced by Kingma & Welling in their 2013 paper *Auto-Encoding Variational Bayes*. Simply put, an autoencoder trains a neural network to reconstruct its inputs by compressing them through a lower-dimensional bottleneck. This compression forces the network to learn compact, meaningful representations, which is what makes traditional autoencoders such a powerful tool for tasks like dimensionality reduction, feature extraction, and anomaly detection.
 
 <figure>
-  <img src="/static/assets/autoencoder.png" width=500px>
+  <img src="/static/assets/autoencoder.png" width=600px>
   <figcaption>A standard autoencoder: the encoder compresses the input into a fixed point in latent space, and the decoder reconstructs it from that point.</figcaption>
 </figure>
 
@@ -26,7 +26,7 @@ From a statistics perspective, a VAE is a Bayesian inference problem. Say we hav
 $$p(z \mid x) = \frac{p(x \mid z)\, p(z)}{p(x)}$$
 
 <figure>
-  <img src="/static/assets/vae-graph.png" width=500px>
+  <img src="/static/assets/vae-graph.png" width=300px>
   <figcaption>The generative process: latent variable $z$ gives rise to observed data $x$, and we want to infer $z$ from $x$ by inverting this relationship.</figcaption>
 </figure>
 
@@ -116,7 +116,7 @@ $$\epsilon \sim \mathcal{N}(0, I), \qquad z = \mu + \sigma \odot \epsilon$$
 Now the randomness is isolated in $\epsilon$, which requires no gradient, while $\mu$ and $\sigma$, the actual outputs of the encoder network, sit on a fully differentiable path. Gradients flow through them normally during backpropagation, and the network learns to shape the mean and variance of its latent distributions just like it would learn any other parameters.
 
 <figure>
-  <img src="/static/assets/reparameterization.png" width=500px>
+  <img src="/static/assets/reparameterization.png" width=300px>
   <figcaption>The reparameterization trick reroutes the stochastic sampling step through a fixed noise source $\epsilon$, keeping the path from $\mu$ and $\sigma$ to $z$ differentiable.</figcaption>
 </figure>
 
