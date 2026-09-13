@@ -143,6 +143,20 @@ a:hover {
   padding: 0.15rem 0.4rem;
 }
 
+.prose img,
+.prose figure {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prose figcaption {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+}
+
 /* Syntax highlighting for fenced code blocks (Pygments "codehilite" token classes).
    Light palette: Pygments "friendly" style; dark palette: Pygments "monokai" style. */
 .codehilite .c { color: #60A0B0; font-style: italic } /* Comment */
