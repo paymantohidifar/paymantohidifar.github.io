@@ -8,7 +8,7 @@ tags:
   - Deep Learning
 ---
 
-My introduction to Variational Autoencoders (VAEs) didn't come from generating synthetic images, but from studying generative models that map protein sequences to functional fitness landscapes to predict mutational effects. VAEs, first introduced by Kingma & Welling in their 2013 paper *Auto-Encoding Variational Bayes* [2], evolved out of the conventional autoencoders (see [1] for a short review) that have been around for decades. Simply put, an autoencoder trains a neural network to reconstruct its inputs by compressing them through a lower-dimensional bottleneck. This compression forces the network to learn compact, meaningful representations, which is what makes traditional autoencoders such a powerful tool for tasks like dimensionality reduction, feature extraction, and anomaly detection.
+My introduction to Variational Autoencoders (VAEs) didn't come from generating synthetic images, but from studying generative models that map protein sequences to functional fitness landscapes to predict mutational effects. VAEs, first introduced by Kingma & Welling in their 2013 paper *Auto-Encoding Variational Bayes* [1], evolved out of the conventional autoencoders (see [2] for a short review) that have been around for decades. Simply put, an autoencoder trains a neural network to reconstruct its inputs by compressing them through a lower-dimensional bottleneck. This compression forces the network to learn compact, meaningful representations, which is what makes traditional autoencoders such a powerful tool for tasks like dimensionality reduction, feature extraction, and anomaly detection.
 
 <figure>
   <img src="/static/assets/autoencoder.png" width=600px>
@@ -239,6 +239,6 @@ At the end, I hope this post helped you understand the math behind implementing 
 
 ## References
 
-1. Jordan, J. [*Introduction to autoencoders*](https://www.jeremyjordan.me/autoencoders/)
-2. Kingma, D. P., & Welling, M. (2013). [*Auto-Encoding Variational Bayes*](https://arxiv.org/abs/1312.6114). arXiv:1312.6114.
+1. Kingma, D. P., & Welling, M. (2013). [*Auto-Encoding Variational Bayes*](https://arxiv.org/abs/1312.6114). arXiv:1312.6114.
+2. Jordan, J. [*Introduction to autoencoders*](https://www.jeremyjordan.me/autoencoders/)
 3. Jordan, J. [*Variational Autoencoders*](https://www.jeremyjordan.me/variational-autoencoders/).
