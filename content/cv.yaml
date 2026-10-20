@@ -26,41 +26,43 @@ experience:
     role: Scientist
     period: "Feb 2022 - Present"
     details:
-      - Engineered and deployed an end-to-end, ML-assisted low-N protein engineering pipeline, combining unsupervised (VAE, transformer) feature extraction with supervised fitness models, to improve industrial enzyme activity and thermostability.
-      - Built statistical and conventional ML pipelines to analyze complex, multi-dimensional biorefinery data, directly informing key business decisions.
-      - Built a full-stack GUI for ingestion, consolidation, statistical analytics, and visualization of multi-modal biological data across projects; selected as a top-3 platform for executive leadership review.
-      - Co-developed a semi-automated HTP directed-evolution and protein-expression pipeline that cut turnaround time from 6 weeks to 2 weeks, accelerating the DBTL cycle.
-      - Developed an HTP platform (a novel FACS + 2A-peptide co-translation method) to boost protein production in an industrial fungal host, identifying multiple enzyme hyperproducers for scaled testing and cutting discovery time from 1+ year to 3 months.
-      - Standardized in-house Oxford Nanopore long-read sequencing and de novo genome assembly SOPs (EPI2ME, Nextflow).
-      - Led a 7-person cross-functional project on biosynthesis of value-added small molecules, resulting in publication of 6+ patent applications within 3 years.
-      - Built a CRISPR-MAD7 platform for single-nucleotide-resolution genetic engineering, enabling construction of 50+ bacterial cell lines and replacing a technology costing over $10K/yr.
+      - Engineered an end-to-end, ML pipeline for optimization of industrial enzymes in low-N regimes, combining unsupervised VAE and protein language model (pLM) fitness representations for zero-shot variant scoring with supervised models trained on experimental activity and thermostability measurements.
+      - Applied the pipeline within DBTL cycles alongside bench scientists to prioritize variants for experimental testing; extending it into an iterative active-learning loop (in development).
+      - Co-led development of a semi-automated HTP directed-evolution and eukaryotic protein-expression pipeline, cutting turnaround time from 6 weeks to 2 weeks and accelerating the DBTL cycle org-wide.
+      - Architected a full-stack platform for ingestion, consolidation, statistical analytics, and visualization of multi-modal biological data across projects; selected as a top-3 platform for executive leadership review.
+      - Designed ML/statistical pipelines to analyze complex, multi-dimensional biorefinery data, directly informing key business decisions.
+      - Pioneered an HTP platform (a novel FACS approach) and led a team to boost protein production in an industrial eukaryotic host, identifying multiple enzyme hyperproducers for scaled testing and cutting discovery time from 1+ year to 3 months.
+      - Standardized and drove adoption of in-house Oxford Nanopore long-read sequencing and de novo genome assembly SOPs (EPI2ME, Nextflow).
+      - Led a 7-person cross-functional project on biosynthesis of value-added small molecules, collaborating across computational and experimental disciplines, and directly contributed to 6 patent applications within 2 years.
+      - Engineered a CRISPR-MAD7 platform for single-nucleotide-resolution genetic engineering, enabling construction of 50+ bacterial cell lines and replacing a technology costing over 10K/yr.   
   - organization: Institute for Genomic Biology, UIUC
     role: Postdoctoral Research Associate
     period: "Aug 2019 - Feb 2022"
     details:
-      - Co-developed a modular genetic toolkit for multi-gene expression and CRISPR-Cas9 chromosomal editing in two non-model oleaginous yeasts, enabling biosynthesis of value-added small molecules (2 publications, 1 conference paper).
+      - Closed evolved Salmonella enterica strain’s genome and called genetic variants via whole-genome sequencing (WGS) analysis using GATK, mapping the genetic drivers of NAC resistance and virulence attenuation and contributing to a publication.
+      - Co-developed a modular genetic toolkit for multi-gene expression and CRISPR-Cas9 chromosomal editing in two non-model yeasts, enabling biosynthesis of value-added small molecules (2 publications, 1 conference paper).
   - organization: Department of Chemical & Biomolecular Engineering, UIUC
     role: Graduate Research Assistant
     period: "Jan 2012 - May 2019"
     details:
+      - Conceptualized and led three independent projects elucidating molecular mechanisms of unconventional chemoreceptor sensing in bacteria — bidirectional pH, alcohol, and toxic aromatic molecule sensing — combining protein engineering and mutagenesis with structural biology, MD simulations of receptor conformational dynamics, and bioinformatics; resulted in 3 journal publications and multiple conference presentations.
+      - Led discovery and characterization of an unconventional DNA-sensing receptor in B. subtilis using in vivo/in vitro assays and in silico motif-discovery analysis; awarded Best Presentation.
       - Co-developed a modular C++ framework for multiscale simulation of cellular population behavior in response to complex spatiotemporal chemical gradients.
-      - Led three independent projects elucidating molecular mechanisms of unconventional chemoreceptor sensing in bacteria, bidirectional pH, alcohol, and toxic aromatic molecule sensing, spanning protein engineering, genetic engineering, bioinformatics, structural biology, and MD simulations; resulted in 3 journal publications and multiple conference presentations.
-      - Led discovery and characterization of an unconventional DNA-sensing receptor in B. subtilis using in vivo/in vitro assays and in silico motif-discovery analysis; presented at multiple conferences and awarded Best Presentation.
-
 projects:
+  - title: Containerized De Novo Protein Binder Design Pipeline
+    link: https://github.com/paymantohidifar/protein-binder-design-pipeline.git
+    details:
+      - Architected a generative design pipeline orchestrating diffusion-based backbone generation (RFdiffusion), inverse-folding sequence design (ProteinMPNN), dual-engine monomer self-consistency validation (ESMFold, Boltz-2), and co-folding interface scoring (Boltz-2, AlphaFold2-Multimer) into a tiered, confidence-score-gated binder-design funnel; prototyped against the human insulin-like receptor E1 domain targeting three defined hotspots.
+      - Unified heterogeneous tool outputs into a single metrics table, automating extraction of the confidence scores that drive each selection gate; extending the platform to Snakemake for automated, production-scale execution
   - title: Deep Learning for Protein Function Prediction
-    period: "June 2026 - July 2026"
     link: https://github.com/paymantohidifar/protein-function-deep-learning.git
     details:
-      - Built a modular deep learning platform (PyTorch, JAX/Flax) on the CAFA benchmark to predict multi-label protein function across 291 Gene Ontology terms from sequence alone, integrating ESM-2 transformer embeddings into an extensible framework for rapid experimentation with custom architectures, loss functions, and metrics.
+      - Built a modular deep learning platform (PyTorch, JAX/Flax) on the CAFA benchmark to predict multi-label protein function across 291 Gene Ontology terms from sequence alone, integrating ESM-2 transformer embeddings into an extensible framework for rapid experimentation with custom architectures, loss functions, and evaluation metrics.
   - title: Production Ready GPT-2 Text Classifier From Scratch
-    period: "April 2026 - May 2026"
     link: https://github.com/paymantohidifar/gpt2-text-classifier-from-scratch.git
     details:
-      - Built a GPT-2 architecture from scratch in PyTorch for text classification, with a configuration-driven pipeline that ingests multi-source, two-column datasets with zero code changes.
-      - Scaled training across multiple GPUs via Distributed Data Parallel (DDP) with real-time tracking in Weights & Biases (WandB), and built an end-to-end evaluation suite for benchmarking and iterative experimentation.
+      - Implemented the GPT-2 architecture from scratch in PyTorch with a configuration-driven training pipeline, LoRA parameter-efficient fine-tuning, multi-GPU scaling via Distributed Data Parallel (DDP), Weights & Biases tracking, and an end-to-end evaluation suite and iterative experimentation.
   - title: Lung Cancer Bulk RNA-Seq Data Analysis Pipeline
-    period: "Feb 2026 - April 2026"
     link: https://github.com/paymantohidifar/lung-cancer-bulk-rnaseq-analysis.git
     details:
       - Built an end-to-end Python/R pipeline for CCLE bulk RNA-seq data — count processing, PCA, hierarchical clustering, differential expression, and pathway enrichment.
